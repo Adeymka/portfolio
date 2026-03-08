@@ -119,12 +119,12 @@ export default function ContactPageContent({
   };
 
   return (
-    <div className="flex h-[calc(100vh-56px)] min-h-[500px] flex-col overflow-hidden bg-white md:flex-row">
-      {/* LEFT PANEL — 40% */}
+    <div className="flex h-[calc(100vh-56px)] min-h-[500px] flex-col overflow-hidden bg-fb-card md:flex-row">
+      {/* LEFT PANEL — 40% (brand gradient) */}
       <div
         className="flex flex-shrink-0 flex-col justify-between p-6 text-white md:w-[40%] md:p-8"
         style={{
-          background: "linear-gradient(180deg, #1877F2 0%, #1464D8 100%)",
+          background: "linear-gradient(180deg, var(--fb-blue) 0%, var(--fb-blue-dark) 100%)",
         }}
       >
         <div>
@@ -191,7 +191,7 @@ export default function ContactPageContent({
       {/* RIGHT PANEL — 60% Messenger */}
       <div className="flex min-h-0 flex-1 flex-col border-l border-fb-border bg-fb-gray/30 md:w-[60%]">
         {/* Top bar */}
-        <div className="flex items-center gap-3 border-b border-fb-border bg-white px-4 py-3">
+        <div className="flex items-center gap-3 border-b border-fb-border bg-fb-card px-4 py-3">
           <Avatar src={avatar} alt={name} size="md" online className="h-10 w-10" />
           <div className="min-w-0 flex-1">
             <p className="font-dm-sans font-semibold text-fb-text">{name}</p>
@@ -227,7 +227,7 @@ export default function ContactPageContent({
                 exit={{ opacity: 0 }}
                 className="flex justify-start"
               >
-                <div className="rounded-2xl rounded-bl-md bg-white px-4 py-3 shadow-card">
+                <div className="rounded-2xl rounded-bl-md bg-fb-card px-4 py-3 shadow-card">
                   <span className="flex gap-1">
                     {[0, 1, 2].map((i) => (
                       <motion.span
@@ -264,7 +264,7 @@ export default function ContactPageContent({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               onSubmit={handleSubmit}
-              className="border-t border-fb-border bg-white p-4"
+              className="border-t border-fb-border bg-fb-card p-4"
             >
               <div className="mb-2 flex items-center gap-2">
                 <Avatar src={null} alt="You" size="sm" className="h-8 w-8 shrink-0" />
@@ -278,7 +278,7 @@ export default function ContactPageContent({
                     runValidation("name");
                   }}
                   onBlur={() => runValidation("name")}
-                  className={`flex-1 rounded-full border bg-fb-gray px-4 py-2 text-[15px] placeholder:text-fb-text-secondary focus:outline-none focus:ring-2 focus:ring-fb-blue/30 ${
+                  className={`flex-1 rounded-full border border-fb-border bg-fb-input-bg px-4 py-2 text-fb-text text-[15px] placeholder:text-fb-text-secondary focus:outline-none focus:ring-2 focus:ring-fb-blue/30 ${
                     errors.name ? "border-red-500" : "border-transparent"
                   }`}
                   aria-invalid={!!errors.name}
@@ -298,7 +298,7 @@ export default function ContactPageContent({
                     runValidation("email");
                   }}
                   onBlur={() => runValidation("email")}
-                  className={`w-full rounded-full border bg-fb-gray px-4 py-2 text-[15px] placeholder:text-fb-text-secondary focus:outline-none focus:ring-2 focus:ring-fb-blue/30 ${
+                  className={`w-full rounded-full border border-fb-border bg-fb-input-bg px-4 py-2 text-fb-text text-[15px] placeholder:text-fb-text-secondary focus:outline-none focus:ring-2 focus:ring-fb-blue/30 ${
                     errors.email ? "border-red-500" : "border-transparent"
                   }`}
                   aria-invalid={!!errors.email}
@@ -320,7 +320,7 @@ export default function ContactPageContent({
                   onBlur={() => setMessageFocused(false)}
                   onBlurCapture={() => runValidation("message")}
                   rows={messageFocused || messageVal.length > 35 ? 3 : 1}
-                  className={`w-full resize-none rounded-full border bg-fb-gray px-4 py-2.5 pr-12 text-[15px] placeholder:text-fb-text-secondary focus:outline-none focus:ring-2 focus:ring-fb-blue/30 transition-[height] ${
+                  className={`w-full resize-none rounded-full border border-fb-border bg-fb-input-bg px-4 py-2.5 pr-12 text-[15px] text-fb-text placeholder:text-fb-text-secondary focus:outline-none focus:ring-2 focus:ring-fb-blue/30 transition-[height] ${
                     errors.message ? "border-red-500" : "border-transparent"
                   } ${messageFocused || messageVal.length > 35 ? "rounded-2xl" : ""}`}
                   aria-invalid={!!errors.message}

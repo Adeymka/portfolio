@@ -47,7 +47,7 @@ export default function ProjectFeed({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="relative rounded-lg border border-fb-border bg-white p-4 shadow-card"
+        className="relative rounded-lg border border-fb-border bg-fb-card p-4 shadow-card"
       >
         <div className="flex gap-3">
           <Avatar
@@ -60,7 +60,7 @@ export default function ProjectFeed({
             <button
               type="button"
               onClick={() => setComingSoonTooltip("post")}
-              className="w-full rounded-full bg-fb-gray px-4 py-2 text-left text-[15px] text-fb-text-secondary transition-colors hover:bg-fb-border/80"
+              className="w-full rounded-full bg-fb-input-bg px-4 py-2 text-left text-[15px] text-fb-text-secondary transition-colors hover:bg-fb-hover"
             >
               What project did you build?
             </button>
@@ -126,7 +126,7 @@ export default function ProjectFeed({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="rounded-lg border border-fb-border bg-white p-8 text-center text-fb-text-secondary shadow-card"
+              className="rounded-lg border border-fb-border bg-fb-card p-8 text-center text-fb-text-secondary shadow-card"
             >
               No projects in this category yet.
             </motion.p>
@@ -165,7 +165,7 @@ export default function ProjectFeed({
         >
           <button
             type="button"
-            className="rounded-lg border border-fb-border bg-white px-6 py-2 text-sm text-fb-text-secondary shadow-card hover:bg-fb-gray transition-colors"
+            className="rounded-lg border border-fb-border bg-fb-card px-6 py-2 text-sm text-fb-text-secondary shadow-card hover:bg-fb-gray transition-colors"
           >
             Load more
           </button>

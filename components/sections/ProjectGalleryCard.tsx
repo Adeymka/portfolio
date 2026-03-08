@@ -1,6 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import Image from "next/image";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import Skeleton from "@/components/ui/Skeleton";
+import { BLUR_DATA_URL } from "@/lib/constants";
 import type { Project } from "@/lib/data";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -17,6 +21,7 @@ export interface ProjectGalleryCardProps {
   featured?: boolean;
   index?: number;
   caseStudyUrl?: string;
+  loading?: boolean;
 }
 
 export default function ProjectGalleryCard({
@@ -24,16 +29,43 @@ export default function ProjectGalleryCard({
   featured = false,
   index = 0,
   caseStudyUrl,
+  loading = false,
 }: ProjectGalleryCardProps) {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
   const categoryColor = CATEGORY_COLORS[project.category] ?? CATEGORY_COLORS.default;
   const link = caseStudyUrl ?? project.liveUrl ?? "#";
 
+  if (loading) {
+    return (
+      <article
+        className={`overflow-hidden rounded-lg border border-fb-border bg-fb-card shadow-card ${
+          featured ? "xl:row-span-2" : ""
+        }`}
+      >
+        <Skeleton
+          className={
+            featured
+              ? "aspect-[4/5] w-full xl:min-h-[340px]"
+              : "aspect-video w-full"
+          }
+        />
+        <div className="p-4">
+          <Skeleton className="mb-2 h-5 w-3/4" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="mt-2 h-4 w-1/2" />
+        </div>
+      </article>
+    );
+  }
+
   return (
     <motion.article
+      ref={ref}
       initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.06, ease: "easeOut" }}
-      className={`group relative overflow-hidden rounded-lg border border-fb-border bg-white shadow-card transition-shadow duration-300 hover:shadow-hover ${
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.4, delay: index * 0.1, ease: "easeOut" }}
+      className={`group relative overflow-hidden rounded-lg border border-fb-border bg-fb-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-hover ${
         featured ? "xl:row-span-2" : ""
       }`}
     >
@@ -45,10 +77,15 @@ export default function ProjectGalleryCard({
           }`}
         >
           {project.image ? (
-            <img
+            <Image
               src={project.image}
               alt={project.title}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
+              unoptimized={project.image.startsWith("http")}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
             <div
@@ -91,7 +128,7 @@ export default function ProjectGalleryCard({
                 </span>
               ))}
             </div>
-            <span className="mt-3 inline-flex w-fit items-center gap-1 rounded-md border-2 border-white px-3 py-1.5 text-sm font-medium text-white transition-colors group-hover:bg-white group-hover:text-fb-text">
+            <span className="mt-3 inline-flex w-fit items-center gap-1 rounded-md border-2 border-white bg-black px-3 py-1.5 text-sm font-medium text-white transition-colors group-hover:bg-white group-hover:text-black">
               View Case Study →
             </span>
           </div>

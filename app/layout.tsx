@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
+import PageTransition from "@/components/PageTransition";
+import CustomCursor from "@/components/CustomCursor";
+import { THEME_SCRIPT } from "./theme-script";
 import "./globals.css";
 
 const syne = Syne({
@@ -35,10 +38,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen bg-fb-gray font-dm-sans text-fb-text antialiased dark:bg-fb-darker dark:text-white">
+    <html lang="fr" className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
+      <body className="min-h-screen bg-fb-gray font-dm-sans text-fb-text antialiased">
         <Navbar />
-        {children}
+        <PageTransition>{children}</PageTransition>
+        <CustomCursor />
       </body>
     </html>
   );

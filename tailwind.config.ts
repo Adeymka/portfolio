@@ -6,6 +6,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: ["selector", '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
@@ -19,6 +20,8 @@ const config: Config = {
         "fb-border": "var(--fb-border)",
         "fb-text": "var(--fb-text)",
         "fb-text-secondary": "var(--fb-text-secondary)",
+        "fb-hover": "var(--fb-hover)",
+        "fb-input-bg": "var(--fb-input-bg)",
         "fb-green": "var(--fb-green)",
         "fb-gold": "var(--fb-gold)",
       },

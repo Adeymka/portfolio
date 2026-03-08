@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import SectionTitle from "@/components/SectionTitle";
 import {
   User,
   Code2,
@@ -110,7 +111,7 @@ export default function AboutPageContent() {
           <div
             className="relative w-full max-w-md overflow-hidden rounded-lg bg-fb-gray shadow-hover"
             style={{
-              border: "8px solid #1877F2",
+              border: "8px solid var(--fb-blue)",
               transform: "rotate(-2deg)",
             }}
           >
@@ -176,9 +177,9 @@ export default function AboutPageContent() {
 
       {/* JOURNEY TIMELINE */}
       <section className="mx-auto max-w-3xl px-4 py-16 md:px-6 md:py-20">
-        <h2 className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
+        <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
           Journey
-        </h2>
+        </SectionTitle>
         <div className="relative mt-10 pl-8 md:pl-10">
           {/* Dashed line */}
           <div
@@ -218,9 +219,9 @@ export default function AboutPageContent() {
 
       {/* VALUES — How I work */}
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-20">
-        <h2 className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
+        <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
           How I work
-        </h2>
+        </SectionTitle>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {VALUES.map((value, i) => (
             <motion.div
@@ -229,7 +230,7 @@ export default function AboutPageContent() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewport}
               transition={{ duration: 0.4, delay: 0.05 * i }}
-              className="rounded-xl border border-fb-border bg-white p-6 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-hover"
+              className="rounded-xl border border-fb-border bg-fb-card p-6 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-hover"
             >
               <span className="inline-flex text-fb-blue">
                 <value.Icon className="h-10 w-10" strokeWidth={1.25} aria-hidden />
@@ -247,9 +248,9 @@ export default function AboutPageContent() {
 
       {/* WHAT I ENJOY — Instagram-style grid */}
       <section className="mx-auto max-w-4xl px-4 py-16 md:px-6 md:py-20">
-        <h2 className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
+        <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
           Outside of code
-        </h2>
+        </SectionTitle>
         <p className="mt-2 text-fb-text-secondary">
           Books, music, travel — the things that keep me curious.
         </p>
@@ -261,7 +262,7 @@ export default function AboutPageContent() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={viewport}
               transition={{ duration: 0.3, delay: 0.03 * i }}
-              className="flex aspect-square flex-col items-center justify-center rounded-xl border border-fb-border bg-white shadow-card transition-all duration-200 hover:shadow-hover"
+              className="flex aspect-square flex-col items-center justify-center rounded-xl border border-fb-border bg-fb-card shadow-card transition-all duration-200 hover:shadow-hover"
             >
               <span className="inline-flex text-fb-blue">
                 <item.Icon className="h-12 w-12 md:h-14 md:w-14" strokeWidth={1.25} aria-hidden />
@@ -276,9 +277,9 @@ export default function AboutPageContent() {
 
       {/* CTA */}
       <section className="mx-auto max-w-2xl px-4 py-16 text-center md:py-20">
-        <h2 className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
+        <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
           Ready to work together?
-        </h2>
+        </SectionTitle>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/projects"
@@ -288,7 +289,7 @@ export default function AboutPageContent() {
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center rounded-lg border-2 border-fb-blue bg-white px-6 py-3 font-medium text-fb-blue transition-all duration-200 hover:bg-fb-blue-light"
+            className="inline-flex items-center justify-center rounded-lg border-2 border-fb-blue bg-fb-card px-6 py-3 font-medium text-fb-blue transition-all duration-200 hover:bg-fb-blue-light"
           >
             Get in touch
           </Link>

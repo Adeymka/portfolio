@@ -1,11 +1,13 @@
+import Skeleton from "@/components/ui/Skeleton";
+
 export default function ContactLoading() {
   return (
-    <div className="flex h-[calc(100vh-56px)] min-h-[500px] flex-col overflow-hidden bg-white md:flex-row">
-      {/* Left panel skeleton */}
+    <div className="flex h-[calc(100vh-56px)] min-h-[500px] flex-col overflow-hidden bg-fb-card md:flex-row">
+      {/* Left panel skeleton — brand gradient (same in both themes) */}
       <div
         className="flex flex-shrink-0 flex-col justify-between p-6 md:w-[40%] md:p-8"
         style={{
-          background: "linear-gradient(180deg, #1877F2 0%, #1464D8 100%)",
+          background: "linear-gradient(180deg, var(--fb-blue) 0%, var(--fb-blue-dark) 100%)",
         }}
       >
         <div>
@@ -24,7 +26,7 @@ export default function ContactLoading() {
       </div>
       {/* Right panel skeleton */}
       <div className="flex min-h-0 flex-1 flex-col border-l border-fb-border bg-fb-gray/30 md:w-[60%]">
-        <div className="flex items-center gap-3 border-b border-fb-border bg-white px-4 py-3">
+        <div className="flex items-center gap-3 border-b border-fb-border bg-fb-card px-4 py-3">
           <div className="h-10 w-10 animate-pulse rounded-full bg-fb-gray" />
           <div className="flex-1">
             <div className="h-4 w-24 animate-pulse rounded bg-fb-gray" />
@@ -39,10 +41,10 @@ export default function ContactLoading() {
             <div className="h-10 w-2/3 max-w-sm animate-pulse rounded-2xl rounded-br-md bg-fb-blue/30" />
           </div>
           <div className="flex justify-start">
-            <div className="h-8 w-24 animate-pulse rounded-2xl rounded-bl-md bg-white" />
+            <div className="h-8 w-24 animate-pulse rounded-2xl rounded-bl-md bg-fb-card" />
           </div>
         </div>
-        <div className="border-t border-fb-border bg-white p-4">
+        <div className="border-t border-fb-border bg-fb-card p-4">
           <div className="h-10 w-full animate-pulse rounded-full bg-fb-gray" />
         </div>
       </div>

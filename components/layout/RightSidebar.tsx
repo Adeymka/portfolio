@@ -65,18 +65,18 @@ export default function RightSidebar({
       style={{ position: "sticky", top: "72px", maxHeight: "calc(100vh - 88px)" }}
     >
       {/* SPONSORED CARD */}
-      <div className="mb-4 rounded-lg border border-fb-border bg-white p-0 shadow-card overflow-hidden">
+      <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-0 shadow-card overflow-hidden">
         <p className="px-4 pt-3 text-[14px] text-fb-text-secondary">
           Sponsored
         </p>
         <a
           href="#hire"
-          className="block p-4 pt-0 hover:bg-fb-gray/50 transition-colors"
+          className="block p-4 pt-0 hover:bg-fb-hover transition-colors"
         >
           <div
             className="mb-3 flex h-24 w-full items-center justify-center rounded-md text-2xl font-bold text-white/90"
             style={{
-              background: "linear-gradient(135deg, #1877F2 0%, #0052CC 100%)",
+              background: "linear-gradient(135deg, var(--fb-blue) 0%, var(--fb-blue-dark) 100%)",
             }}
           >
             {initials}
@@ -94,7 +94,7 @@ export default function RightSidebar({
       </div>
 
       {/* PEOPLE YOU MAY KNOW */}
-      <div className="mb-4 rounded-lg border border-fb-border bg-white p-4 shadow-card">
+      <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
           People you may know
         </h3>
@@ -131,7 +131,7 @@ export default function RightSidebar({
       </div>
 
       {/* CONTACT INFO / AVAILABILITY */}
-      <div className="mb-4 rounded-lg border border-fb-border bg-white p-4 shadow-card">
+      <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
           Contact Info
         </h3>
@@ -191,7 +191,7 @@ export default function RightSidebar({
       </div>
 
       {/* TRENDING SKILLS */}
-      <div className="mb-4 rounded-lg border border-fb-border bg-white p-4 shadow-card">
+      <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
           #Trending in your stack
         </h3>

@@ -71,7 +71,7 @@ function SkillBar({ skill, onVisible }: { skill: Skill; onVisible: () => void })
   const color = CATEGORY_COLORS[skill.category] ?? CATEGORY_COLORS.default;
 
   return (
-    <div ref={ref} className="rounded-lg border border-fb-border bg-white p-3">
+    <div ref={ref} className="rounded-lg border border-fb-border bg-fb-card p-3">
       <div className="flex items-center gap-2">
         <span
           className="h-2 w-2 shrink-0 rounded-full"
@@ -115,7 +115,7 @@ export default function LeftSidebar({
       style={{ position: "sticky", top: "72px", maxHeight: "calc(100vh - 88px)" }}
     >
       {/* INTRO CARD */}
-      <div className="mb-4 rounded-lg border border-fb-border bg-white p-4 shadow-card">
+      <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
           Intro
         </h3>
@@ -156,7 +156,7 @@ export default function LeftSidebar({
       </div>
 
       {/* SKILLS CARD */}
-      <div className="mb-3 rounded-lg border border-fb-border bg-white p-4 shadow-card">
+      <div className="mb-3 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
           Skills
         </h3>
@@ -168,7 +168,7 @@ export default function LeftSidebar({
       </div>
 
       {/* STACK CARD */}
-      <div className="mb-3 rounded-lg border border-fb-border bg-white p-4 shadow-card">
+      <div className="mb-3 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
           Stack & Tools
         </h3>
@@ -177,7 +177,7 @@ export default function LeftSidebar({
             <li key={item.name}>
               <button
                 type="button"
-                className="flex w-full cursor-pointer items-center gap-2 rounded-lg py-2 px-2 -mx-2 text-left transition-colors duration-200 hover:bg-fb-gray"
+                className="flex w-full cursor-pointer items-center gap-2 rounded-lg py-2 px-2 -mx-2 text-left transition-colors duration-200 hover:bg-fb-hover"
               >
                 <span
                   className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[10px] font-semibold bg-fb-gray text-fb-text"
@@ -198,7 +198,7 @@ export default function LeftSidebar({
       </div>
 
       {/* AVAILABILITY CARD */}
-      <div className="mb-3 rounded-lg border border-fb-border bg-white p-4 shadow-card">
+      <div className="mb-3 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <div className="flex items-center gap-2 mb-1">
           <span
             className="h-2.5 w-2.5 shrink-0 rounded-full bg-fb-green animate-pulse-dot"

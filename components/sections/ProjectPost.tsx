@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import Avatar from "@/components/ui/Avatar";
+import { BLUR_DATA_URL } from "@/lib/constants";
 import type { Project, Comment } from "@/lib/data";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -73,7 +76,7 @@ export default function ProjectPost({
   };
 
   return (
-    <article className="rounded-lg border border-fb-border bg-white p-4 shadow-card">
+    <article className="rounded-lg border border-fb-border bg-fb-card p-4 shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-hover">
       {/* HEADER */}
       <div className="mb-3 flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
@@ -106,7 +109,7 @@ export default function ProjectPost({
                 aria-hidden
                 onClick={() => setMenuOpen(false)}
               />
-              <div className="absolute right-0 top-full z-20 mt-1 min-w-[160px] rounded-lg border border-fb-border bg-white py-1 shadow-modal">
+              <div className="absolute right-0 top-full z-20 mt-1 min-w-[160px] rounded-lg border border-fb-border bg-fb-card py-1 shadow-modal">
                 {project.liveUrl && (
                   <a
                     href={project.liveUrl}
@@ -183,16 +186,21 @@ export default function ProjectPost({
       <div className="relative mb-3 overflow-hidden rounded-lg aspect-video bg-fb-gray group">
         {project.image ? (
           <>
-            <img
+            <Image
               src={project.image}
               alt={project.title}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
+              unoptimized={project.image.startsWith("http")}
+              sizes="(max-width: 768px) 100vw, 600px"
             />
             <a
               href={project.liveUrl ?? "#"}
               className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
             >
-              <span className="rounded-lg bg-white px-4 py-2 font-dm-sans text-sm font-medium text-fb-text shadow-hover">
+              <span className="rounded-lg bg-fb-card px-4 py-2 font-dm-sans text-sm font-medium text-fb-text shadow-hover">
                 View Project →
               </span>
             </a>
@@ -209,7 +217,7 @@ export default function ProjectPost({
               href={project.liveUrl ?? "#"}
               className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
             >
-              <span className="rounded-lg bg-white px-4 py-2 font-dm-sans text-sm font-medium text-fb-text shadow-hover">
+              <span className="rounded-lg bg-fb-card px-4 py-2 font-dm-sans text-sm font-medium text-fb-text shadow-hover">
                 View Project →
               </span>
             </a>
@@ -224,7 +232,17 @@ export default function ProjectPost({
           className="hover:underline"
           onClick={() => setReactionPicker((p) => (p ? null : "like"))}
         >
-          👍❤️😮 {totalReactions} reactions
+          👍❤️😮{" "}
+          <motion.span
+            key={totalReactions}
+            initial={{ scale: 1.3 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="inline-block"
+          >
+            {totalReactions}
+          </motion.span>{" "}
+          reactions
         </button>
         <button
           type="button"
@@ -242,11 +260,13 @@ export default function ProjectPost({
       <div className="grid grid-cols-3 gap-1 pt-1">
         {(["like", "love", "wow"] as const).map((type) => (
           <div key={type} className="relative">
-            <button
+            <motion.button
               type="button"
               onMouseEnter={() => setReactionPicker(type)}
               onMouseLeave={() => setReactionPicker(null)}
               onClick={() => toggleReaction(type)}
+              whileTap={{ scale: 1.2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className={`flex w-full items-center justify-center gap-1.5 rounded-lg py-1.5 text-[15px] transition-colors duration-200 hover:bg-fb-gray ${
                 userReaction === type ? "text-fb-blue font-bold" : "text-fb-text-secondary"
               }`}
@@ -255,24 +275,26 @@ export default function ProjectPost({
               {type === "love" && "❤️"}
               {type === "wow" && "😮"}
               <span className="hidden sm:inline">{REACTION_LABELS[type]}</span>
-            </button>
+            </motion.button>
             {reactionPicker === type && (
               <div
-                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 flex gap-0.5 rounded-full border border-fb-border bg-white px-2 py-1 shadow-hover"
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 flex gap-0.5 rounded-full border border-fb-border bg-fb-card px-2 py-1 shadow-hover"
                 onMouseEnter={() => setReactionPicker(type)}
                 onMouseLeave={() => setReactionPicker(null)}
               >
                 {(["like", "love", "wow"] as const).map((r) => (
-                  <button
+                  <motion.button
                     key={r}
                     type="button"
                     onClick={() => handleReaction(r)}
+                    whileTap={{ scale: 1.2 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
                     className="rounded-full p-1 text-lg hover:scale-125 transition-transform"
                   >
                     {r === "like" && "👍"}
                     {r === "love" && "❤️"}
                     {r === "wow" && "😮"}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             )}
@@ -305,7 +327,7 @@ export default function ProjectPost({
             <input
               type="text"
               placeholder="Write a comment..."
-              className="flex-1 rounded-full bg-fb-gray px-4 py-2 text-[15px] text-fb-text placeholder:text-fb-text-secondary border-0 focus:outline-none focus:ring-2 focus:ring-fb-blue/30"
+              className="flex-1 rounded-full bg-fb-input-bg px-4 py-2 text-[15px] text-fb-text placeholder:text-fb-text-secondary border-0 focus:outline-none focus:ring-2 focus:ring-fb-blue/30"
               readOnly
               aria-label="Write a comment"
             />

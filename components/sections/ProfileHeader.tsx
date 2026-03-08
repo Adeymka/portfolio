@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import { motion, useInView } from "framer-motion";
 import { Pencil, MapPin, Globe, Briefcase, MessageCircle, Download } from "lucide-react";
+import { BLUR_DATA_URL } from "@/lib/constants";
 
 const FLOAT_PARTICLES = [
   { size: 6, left: "15%", top: "30%", delay: 0, anim: "floatParticle" },
@@ -53,9 +55,11 @@ export default function ProfileHeader({
   happyClients = 18,
 }: ProfileHeaderProps) {
   const [coverHover, setCoverHover] = useState(false);
-  const projects = useCountUp(projectsCount);
-  const years = useCountUp(yearsExperience);
-  const clients = useCountUp(happyClients);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const statsInView = useInView(statsRef, { once: true, amount: 0.5 });
+  const projects = useCountUp(projectsCount, 1500, statsInView);
+  const years = useCountUp(yearsExperience, 1500, statsInView);
+  const clients = useCountUp(happyClients, 1500, statsInView);
   const statsValues = [projects, years, clients];
   const statsLabels = STAT_LABELS;
 
@@ -122,10 +126,15 @@ export default function ProfileHeader({
               style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}
             >
               {profileImage ? (
-                <img
+                <Image
                   src={profileImage}
                   alt={name}
-                  className="h-full w-full object-cover"
+                  fill
+                  className="object-cover"
+                  placeholder="blur"
+                  blurDataURL={BLUR_DATA_URL}
+                  unoptimized={profileImage.startsWith("http")}
+                  sizes="150px"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-fb-blue-light font-syne text-3xl font-bold text-fb-blue md:text-4xl">
@@ -187,8 +196,7 @@ export default function ProfileHeader({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3, delay: 0.55 }}
-                className="mt-2 inline-flex rounded-full border border-fb-green px-3 py-1 text-xs font-medium"
-                style={{ backgroundColor: "#E8F5E9", color: "#2E7D32" }}
+                className="mt-2 inline-flex rounded-full border border-fb-green bg-fb-green/15 px-3 py-1 text-xs font-medium text-fb-green"
               >
                 Open to work
               </motion.span>
@@ -203,21 +211,22 @@ export default function ProfileHeader({
             >
               <a
                 href="#hire"
-                className="inline-flex items-center gap-2 rounded-lg bg-fb-blue px-6 py-2 font-medium text-white shadow-card transition-all duration-200 hover:translate-y-[-1px] hover:bg-fb-blue-dark hover:shadow-hover"
+                className="hire-me-btn inline-flex items-center gap-2 rounded-lg bg-fb-blue px-6 py-2 font-medium text-white shadow-card transition-all duration-200 hover:translate-y-[-1px] hover:bg-fb-blue-dark hover:shadow-hover active:scale-[0.97]"
               >
-                <Briefcase className="h-5 w-5" aria-hidden />
+                <span className="hire-me-shimmer" aria-hidden />
+                <Briefcase className="relative z-10 h-5 w-5" aria-hidden />
                 Hire Me
               </a>
               <a
                 href="#message"
-                className="inline-flex items-center gap-2 rounded-lg border-2 border-fb-blue bg-white px-5 py-2 font-medium text-fb-blue transition-all duration-200 hover:bg-fb-blue-light"
+                className="inline-flex items-center gap-2 rounded-lg border-2 border-fb-blue bg-fb-card px-5 py-2 font-medium text-fb-blue transition-all duration-200 hover:bg-fb-blue-light active:scale-[0.97]"
               >
                 <MessageCircle className="h-5 w-5" aria-hidden />
                 Message
               </a>
               <a
                 href="#cv"
-                className="inline-flex items-center gap-2 rounded-lg border border-fb-border bg-transparent px-5 py-2 font-medium text-fb-text transition-all duration-200 hover:bg-fb-gray"
+                className="inline-flex items-center gap-2 rounded-lg border border-fb-border bg-transparent px-5 py-2 font-medium text-fb-text transition-all duration-200 hover:bg-fb-gray active:scale-[0.97]"
               >
                 <Download className="h-5 w-5" aria-hidden />
                 Download CV
@@ -225,8 +234,9 @@ export default function ProfileHeader({
             </motion.div>
           </div>
 
-          {/* Stats row */}
+          {/* Stats row — count up when in view */}
           <motion.div
+            ref={statsRef}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.5, ease: "easeOut" }}

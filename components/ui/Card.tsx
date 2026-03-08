@@ -10,7 +10,9 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ children, className = "", hover = true, ...props }, ref) => {
     const base =
       "rounded-xl bg-fb-card border border-fb-border shadow-card transition-all duration-200";
-    const hoverClass = hover ? "hover:shadow-hover hover:border-fb-border/80" : "";
+    const hoverClass = hover
+      ? "hover:shadow-hover hover:border-fb-border/80 hover:-translate-y-1"
+      : "";
 
     return (
       <div

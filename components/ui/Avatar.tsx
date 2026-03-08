@@ -58,7 +58,7 @@ export default function Avatar({
       {online !== undefined && (
         <span
           className={`absolute rounded-full border-fb-card ${indicatorClass} ${
-            online ? "bg-fb-green" : "bg-fb-text-secondary"
+            online ? "bg-fb-green avatar-online-pulse" : "bg-fb-text-secondary"
           }`}
           aria-hidden
         />

@@ -122,7 +122,7 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
                 href={caseStudy.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-sm font-medium text-fb-text hover:bg-fb-gray"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-fb-card px-4 py-2 text-sm font-medium text-fb-text hover:bg-fb-hover"
               >
                 View Live Site ↗
               </a>
@@ -154,7 +154,7 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
-            className="sticky top-[56px] z-50 flex flex-wrap items-center justify-between gap-2 border-b border-fb-border bg-white/95 px-4 py-3 backdrop-blur-sm md:px-6"
+            className="sticky top-[56px] z-50 flex flex-wrap items-center justify-between gap-2 border-b border-fb-border bg-fb-card/95 px-4 py-3 backdrop-blur-sm md:px-6"
           >
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-syne text-lg font-bold text-fb-text">
@@ -171,7 +171,7 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
             </div>
             <button
               type="button"
-              className="rounded-lg border border-fb-border px-3 py-1.5 text-sm text-fb-text hover:bg-fb-gray"
+              className="rounded-lg border border-fb-border px-3 py-1.5 text-sm text-fb-text hover:bg-fb-hover"
             >
               Share
             </button>
@@ -303,10 +303,10 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
                     borderLeftWidth: "4px",
                     borderLeftColor:
                       tech.category === "frontend"
-                        ? "#1877F2"
+                        ? "var(--fb-blue)"
                         : tech.category === "backend"
-                          ? "#42B883"
-                          : "#E8A020",
+                          ? "var(--fb-green)"
+                          : "var(--fb-gold)",
                   }}
                 >
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-fb-gray font-jetbrains-mono text-sm font-bold text-fb-text">
@@ -433,7 +433,7 @@ function ResultCard({
   const count = useCountUp(num, 1200, isNumeric);
   const displayValue = isNumeric ? count : stat.value;
   return (
-    <div className="rounded-xl border border-fb-border bg-white p-6 shadow-card">
+    <div className="rounded-xl border border-fb-border bg-fb-card p-6 shadow-card">
       <p className="font-syne text-3xl font-bold text-fb-blue">
         {stat.prefix}
         {displayValue}

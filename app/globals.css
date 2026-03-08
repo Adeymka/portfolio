@@ -14,8 +14,8 @@
   --fb-border: #e4e6ea;
   --fb-text: #050505;
   --fb-text-secondary: #65676b;
-  --fb-green: #42b883;
-  --fb-gold: #e8a020;
+  --fb-hover: #f0f2f5;
+  --fb-input-bg: #f0f2f5;
 
   /* Typography — CSS variables for font families (set in layout) */
   --font-syne: "Syne", sans-serif;
@@ -28,10 +28,21 @@
   --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-.dark {
-  --fb-nav-bg: #242526;
-  --fb-nav-text: #ffffff;
-  --fb-nav-border: #3a3b3c;
+[data-theme="dark"] {
+  --fb-card: #242526;
+  --fb-gray: #18191a;
+  --fb-border: #3a3b3c;
+  --fb-text: #e4e6ea;
+  --fb-text-secondary: #b0b3b8;
+  --fb-hover: #3a3b3c;
+  --fb-input-bg: #3a3b3c;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+html {
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
 
@@ -63,6 +74,85 @@
   50% { opacity: 0.8; transform: scale(1.1); }
 }
 
+@keyframes avatar-ring-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(66, 184, 131, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(66, 184, 131, 0); }
+}
+.avatar-online-pulse {
+  animation: avatar-ring-pulse 2s ease-in-out infinite;
+}
+
+/* Skeleton shimmer — Facebook-style */
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--fb-border) 0%,
+    var(--fb-gray) 50%,
+    var(--fb-border) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite linear;
+}
+
+[data-theme="dark"] .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #3a3b3c 0%,
+    #4e4f50 50%,
+    #3a3b3c 100%
+  );
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .skeleton-shimmer {
+    animation: none;
+    background: var(--fb-border);
+  }
+  [data-theme="dark"] .skeleton-shimmer {
+    background: #3a3b3c;
+  }
+}
+
+/* Hire Me button — gradient shimmer on hover */
+.hire-me-btn {
+  position: relative;
+  overflow: hidden;
+}
+.hire-me-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: hire-me-shimmer 2s ease-in-out infinite;
+  pointer-events: none;
+}
+.hire-me-btn:hover .hire-me-shimmer {
+  animation-duration: 1s;
+}
+@keyframes hire-me-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .profile-cover-gradient {
   background: linear-gradient(
     135deg,
@@ -70,6 +160,19 @@
     #0052cc 30%,
     #00c2ff 60%,
     #1877f2 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+[data-theme="dark"] .profile-cover-gradient {
+  background: linear-gradient(
+    135deg,
+    #0d47a1 0%,
+    #01579b 30%,
+    #006064 50%,
+    #01579b 70%,
+    #0d47a1 100%
   );
   background-size: 400% 400%;
   animation: gradientShift 8s ease infinite;
@@ -87,6 +190,18 @@
   animation: gradientShift 8s ease infinite;
 }
 
+[data-theme="dark"] .projects-hero-gradient {
+  background: linear-gradient(
+    135deg,
+    #3730a3 0%,
+    #1e3a5f 40%,
+    #0e7490 70%,
+    #3730a3 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
 /* Scroll sans barre visible — garde le scroll actif */
 .scrollbar-hide {
   scrollbar-width: none;
@@ -94,6 +209,17 @@
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Code blocks — dark theme border */
+[data-theme="dark"] pre,
+[data-theme="dark"] code {
+  border: 1px solid #30363d;
+}
+
+/* Images — slight brightness reduction in dark */
+[data-theme="dark"] img {
+  filter: brightness(0.9);
 }
 
 @layer base {

@@ -107,9 +107,14 @@ export default function ProjectsGallery({
           }}
         />
         <div className="relative">
-          <h1 className="font-syne text-4xl font-bold md:text-[48px]">
+          <motion.h1
+            initial={{ opacity: 0, x: -24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="font-syne text-4xl font-bold md:text-[48px]"
+          >
             My Work
-          </h1>
+          </motion.h1>
           <p className="mt-2 font-dm-sans text-lg text-white/90">
             {projects.length} projects · {categoriesCount} categories ·{" "}
             {satisfiedClientsCount} satisfied clients
@@ -118,7 +123,7 @@ export default function ProjectsGallery({
       </header>
 
       {/* STICKY FILTER BAR */}
-      <div className="sticky top-[72px] z-40 -mt-px border-b border-fb-border bg-white/95 px-4 py-3 backdrop-blur-sm md:px-6">
+      <div className="sticky top-[72px] z-40 -mt-px border-b border-fb-border bg-fb-card/95 px-4 py-3 backdrop-blur-sm md:px-6">
         <div className="mx-auto flex max-w-6xl flex-col gap-3">
           <div className="flex flex-wrap items-center gap-2">
             {CATEGORIES.map((cat) => (
@@ -140,7 +145,7 @@ export default function ProjectsGallery({
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="rounded-lg border border-fb-border bg-white px-3 py-2 text-sm text-fb-text focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
+              className="rounded-lg border border-fb-border bg-fb-input-bg px-3 py-2 text-sm text-fb-text focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
             >
               {SORT_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -153,7 +158,7 @@ export default function ProjectsGallery({
               placeholder="Search by name or tech stack..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 min-w-[200px] max-w-xs rounded-lg border border-fb-border bg-fb-gray px-4 py-2 text-sm text-fb-text placeholder:text-fb-text-secondary focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
+              className="flex-1 min-w-[200px] max-w-xs rounded-lg border border-fb-border bg-fb-input-bg px-4 py-2 text-sm text-fb-text placeholder:text-fb-text-secondary focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
             />
           </div>
           {activeFilters.length > 0 && (
@@ -235,7 +240,7 @@ export default function ProjectsGallery({
               <button
                 type="button"
                 onClick={() => setVisibleCount((n) => n + 6)}
-                className="rounded-lg border border-fb-border bg-white px-6 py-3 text-sm font-medium text-fb-text shadow-card hover:bg-fb-gray transition-colors"
+                className="rounded-lg border border-fb-border bg-fb-card px-6 py-3 text-sm font-medium text-fb-text shadow-card hover:bg-fb-gray transition-colors"
               >
                 Load more projects
               </button>
