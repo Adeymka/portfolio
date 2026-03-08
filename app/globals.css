@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Colors */
+  --fb-blue: #1877f2;
+  --fb-blue-dark: #1464d8;
+  --fb-blue-light: #e7f0fd;
+  --fb-dark: #242526;
+  --fb-darker: #18191a;
+  --fb-gray: #f0f2f5;
+  --fb-card: #ffffff;
+  --fb-border: #e4e6ea;
+  --fb-text: #050505;
+  --fb-text-secondary: #65676b;
+  --fb-green: #42b883;
+  --fb-gold: #e8a020;
+
+  /* Typography — CSS variables for font families (set in layout) */
+  --font-syne: "Syne", sans-serif;
+  --font-dm-sans: "DM Sans", sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono", monospace;
+
+  /* Shadows — system */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.dark {
+  --fb-nav-bg: #242526;
+  --fb-nav-text: #ffffff;
+  --fb-nav-border: #3a3b3c;
+}
+
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes floatParticle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes floatParticleAlt {
+  0%, 100% { transform: translateY(-20px); }
+  50% { transform: translateY(20px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+.profile-cover-gradient {
+  background: linear-gradient(
+    135deg,
+    #1877f2 0%,
+    #0052cc 30%,
+    #00c2ff 60%,
+    #1877f2 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+.projects-hero-gradient {
+  background: linear-gradient(
+    135deg,
+    #6366f1 0%,
+    #4f46e5 25%,
+    #06b6d4 60%,
+    #6366f1 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* Scroll sans barre visible — garde le scroll actif */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@layer base {
+  body {
+    @apply bg-fb-gray text-fb-text antialiased;
+    font-family: var(--font-dm-sans);
+  }
+}
