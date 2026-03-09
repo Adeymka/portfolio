@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, Bell, MessageCircle, Menu, Sun, Moon, Settings } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { siteLinks } from "@/lib/site-content";
 
 const THEME_KEY = "theme";
 
@@ -36,8 +38,8 @@ export interface NavbarProps {
 }
 
 export default function Navbar({
-  siteName = "Portfolio",
-  profileAvatar = null,
+  siteName = "Mr Adeymka",
+  profileAvatar = siteLinks.profileImageUrl,
   notificationCount = 3,
   messageCount = 1,
 }: NavbarProps) {
@@ -102,17 +104,18 @@ export default function Navbar({
       >
         {/* LEFT */}
         <div className="flex min-w-0 items-center gap-2 md:gap-3">
-          {/* Logo: circular icon + name */}
+          {/* Logo: image + name */}
           <a
             href="/"
             className="flex shrink-0 items-center gap-2 no-underline transition-opacity duration-200 hover:opacity-90"
           >
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-fb-blue text-white font-syne font-bold text-lg"
-              aria-hidden
-            >
-              {siteName.charAt(0)}
-            </span>
+            <Image
+              src={siteLinks.logoUrl}
+              alt=""
+              width={36}
+              height={36}
+              className="h-9 w-9 shrink-0 rounded-full object-contain"
+            />
             <span className="hidden font-syne text-xl font-bold text-fb-blue sm:inline">
               {siteName}
             </span>

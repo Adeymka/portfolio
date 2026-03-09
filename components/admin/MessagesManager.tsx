@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Trash2, Check, X, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -43,17 +43,17 @@ export default function MessagesManager({
 
   const selected = messages.find((m) => m.id === selectedId);
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     const { data } = await supabase
       .from("messages")
       .select("*")
       .order("created_at", { ascending: false });
     if (data) setMessages(data);
-  };
+  }, [supabase]);
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     if (selectedId && !messages.find((m) => m.id === selectedId)) {

@@ -10,17 +10,18 @@ import MobileNavbar from "./MobileNavbar";
 import type { Project } from "@/lib/data";
 import type { Skill } from "@/lib/data";
 import type { IntroData, StackItem } from "@/components/layout/LeftSidebar";
+import { siteLinks } from "@/lib/site-content";
 
 const CATEGORIES = ["All", "SaaS", "E-commerce", "Mobile", "Vitrine", "API/Backend"] as const;
 
 const MOBILE_INTRO: IntroData = {
-  bio: "I build web apps that users love. React, Node, and clean code are my daily bread.",
-  jobTitle: "Full Stack Developer",
+  bio: "Passionné par la création d'applications web modernes et performantes.",
+  jobTitle: "Développeur Web",
   company: "Freelance",
-  school: "École 42",
-  location: "Paris, France",
-  website: "https://yoursite.com",
-  joinedDate: "March 2024",
+  school: "École Internationale de Graphisme (EIG)",
+  location: "Abomey-Calavi, Bénin",
+  website: "https://mykerobert3-arch.github.io/DonaldPortfolio/",
+  joinedDate: "2024",
 };
 
 const MOBILE_STACK: StackItem[] = [
@@ -85,7 +86,7 @@ export default function MobileProjectsPage({ projects }: MobileProjectsPageProps
         paddingBottom: "calc(56px + env(safe-area-inset-bottom))",
       }}
     >
-      <MobileNavbar />
+      <MobileNavbar profileAvatar={siteLinks.profileImageUrl} />
       <div
         className="px-4 py-8 text-white"
         style={{
@@ -149,6 +150,7 @@ export default function MobileProjectsPage({ projects }: MobileProjectsPageProps
         skills={displaySkills}
         stack={MOBILE_STACK}
         nextAvailableDate="Next week"
+        profileAvatar={siteLinks.profileImageUrl}
       />
     </div>
   );

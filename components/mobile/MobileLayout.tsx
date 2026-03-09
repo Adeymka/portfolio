@@ -12,13 +12,13 @@ import type { Skill } from "@/lib/data";
 import type { IntroData, StackItem } from "@/components/layout/LeftSidebar";
 
 const MOBILE_INTRO: IntroData = {
-  bio: "I build web apps that users love. React, Node, and clean code are my daily bread.",
-  jobTitle: "Full Stack Developer",
+  bio: "Passionné par la création d'applications web modernes et performantes.",
+  jobTitle: "Développeur Web",
   company: "Freelance",
-  school: "École 42",
-  location: "Paris, France",
-  website: "https://yoursite.com",
-  joinedDate: "March 2024",
+  school: "École Internationale de Graphisme (EIG)",
+  location: "Abomey-Calavi, Bénin",
+  website: "https://mykerobert3-arch.github.io/DonaldPortfolio/",
+  joinedDate: "2024",
 };
 
 const MOBILE_STACK: StackItem[] = [
@@ -58,7 +58,21 @@ function mapRowToProject(row: {
   };
 }
 
-export default function MobileLayout() {
+export interface ProfileStats {
+  projectsCount: number;
+  happyClients: number;
+  yearsExperience: number;
+}
+
+export default function MobileLayout({
+  profileImageUrl = null,
+  location,
+  profileStats,
+}: {
+  profileImageUrl?: string | null;
+  location?: string;
+  profileStats?: ProfileStats;
+} = {}) {
   const [projects, setProjects] = useState<(Project & { slug?: string })[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -99,6 +113,14 @@ export default function MobileLayout() {
           { name: "Figma", level: 60, category: "Design" },
         ];
 
+  const displayStack: import("@/components/layout/LeftSidebar").StackItem[] =
+    displaySkills.length > 0
+      ? displaySkills.map((s) => ({
+          name: s.name,
+          category: s.category as import("@/components/layout/LeftSidebar").StackItem["category"],
+        }))
+      : MOBILE_STACK;
+
   return (
     <div
       className="flex min-h-screen flex-col bg-fb-gray lg:hidden"
@@ -106,12 +128,22 @@ export default function MobileLayout() {
         paddingBottom: "calc(56px + env(safe-area-inset-bottom))",
       }}
     >
-      <MobileNavbar />
+      <MobileNavbar profileAvatar={profileImageUrl} />
       <main className="flex-1">
         <div className="mb-2 bg-fb-card">
-          <MobileProfileHeader />
+          <MobileProfileHeader
+            profileImage={profileImageUrl}
+            location={location}
+            projectsCount={profileStats?.projectsCount ?? projects.length}
+            happyClients={profileStats?.happyClients}
+            yearsExperience={profileStats?.yearsExperience}
+          />
         </div>
-        <MobileProjectFeed projects={projects} />
+        <        MobileProjectFeed
+          projects={projects}
+          authorAvatar={profileImageUrl}
+          authorName="Donald ADJINDA"
+        />
       </main>
       <BottomNav onMoreClick={() => setSheetOpen(true)} />
       <MobileLeftSheet
@@ -119,8 +151,9 @@ export default function MobileLayout() {
         onClose={() => setSheetOpen(false)}
         intro={MOBILE_INTRO}
         skills={displaySkills}
-        stack={MOBILE_STACK}
+        stack={displayStack}
         nextAvailableDate="Next week"
+        profileAvatar={profileImageUrl}
       />
     </div>
   );

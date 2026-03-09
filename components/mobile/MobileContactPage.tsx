@@ -2,23 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Phone, Calendar, CheckCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import MobileNavbar from "./MobileNavbar";
 import BottomNav from "./BottomNav";
 import MobileLeftSheet from "./MobileLeftSheet";
 import type { IntroData, StackItem } from "@/components/layout/LeftSidebar";
 import type { Skill } from "@/lib/data";
+import { siteLinks } from "@/lib/site-content";
 
 const MIN_MESSAGE_LENGTH = 20;
 
 const MOBILE_INTRO: IntroData = {
-  bio: "I build web apps that users love.",
-  jobTitle: "Full Stack Developer",
+  bio: "Passionné par la création d'applications web modernes et performantes.",
+  jobTitle: "Développeur Web",
   company: "Freelance",
-  school: "École 42",
-  location: "Paris, France",
-  website: "https://yoursite.com",
-  joinedDate: "March 2024",
+  school: "École Internationale de Graphisme (EIG)",
+  location: "Abomey-Calavi, Bénin",
+  website: "https://mykerobert3-arch.github.io/DonaldPortfolio/",
+  joinedDate: "2024",
 };
 
 const MOBILE_STACK: StackItem[] = [
@@ -103,7 +105,7 @@ export default function MobileContactPage() {
       className="flex min-h-screen flex-col bg-fb-gray lg:hidden"
       style={{ paddingBottom: "calc(56px + env(safe-area-inset-bottom))" }}
     >
-      <MobileNavbar />
+      <MobileNavbar profileAvatar={siteLinks.profileImageUrl} />
       <main className="flex-1 overflow-y-auto">
       {/* HEADER */}
       <header className="px-4 pt-6 pb-4">
@@ -112,17 +114,37 @@ export default function MobileContactPage() {
       </header>
 
       {/* INFO CARDS ROW */}
-      <div className="mb-4 flex gap-3 px-4">
-        <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-fb-border bg-fb-card p-3 text-center">
-          <span className="text-lg" aria-hidden>📧</span>
+      <div className="mb-4 flex flex-col gap-3 px-4">
+        <a
+          href={`mailto:${siteLinks.email}`}
+          className="flex flex-1 flex-col items-center justify-center rounded-xl border border-fb-border bg-fb-card p-3 text-center transition-colors hover:bg-fb-hover"
+        >
+          <Mail className="h-6 w-6 text-fb-blue" aria-hidden />
           <p className="mt-1 text-xs text-fb-text-secondary">Email</p>
+        </a>
+        <div className="flex flex-1 flex-col rounded-xl border border-fb-border bg-fb-card p-3 text-center">
+          <Phone className="mx-auto h-6 w-6 text-fb-blue" aria-hidden />
+          <p className="mt-1 text-xs text-fb-text-secondary">Téléphone</p>
+          <p className="mt-0.5 text-sm font-medium text-fb-text">{siteLinks.phone}</p>
+          <div className="mt-2 flex justify-center gap-3">
+            <a
+              href={`tel:${siteLinks.phoneE164}`}
+              className="rounded-lg bg-fb-blue px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+            >
+              Appel direct
+            </a>
+            <a
+              href={siteLinks.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg bg-[#25D366] px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+            >
+              WhatsApp
+            </a>
+          </div>
         </div>
         <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-fb-border bg-fb-card p-3 text-center">
-          <span className="text-lg" aria-hidden>💬</span>
-          <p className="mt-1 text-xs text-fb-text-secondary">WhatsApp</p>
-        </div>
-        <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-fb-border bg-fb-card p-3 text-center">
-          <span className="text-lg" aria-hidden>📅</span>
+          <Calendar className="mx-auto h-6 w-6 text-fb-blue" aria-hidden />
           <p className="mt-1 text-xs text-fb-text-secondary">Calendly</p>
         </div>
       </div>
@@ -137,7 +159,7 @@ export default function MobileContactPage() {
             transition={{ duration: 0.3 }}
             className="flex flex-col items-center justify-center px-4 py-12"
           >
-            <span className="text-[48px] text-fb-green" aria-hidden>✅</span>
+            <CheckCircle className="h-12 w-12 text-fb-green" aria-hidden />
             <p className="mt-4 font-syne text-xl font-bold text-fb-text">Message envoyé !</p>
             <p className="mt-1 text-sm text-fb-text-secondary">Je vous réponds dans les 24h.</p>
           </motion.div>
@@ -213,6 +235,7 @@ export default function MobileContactPage() {
         skills={DEFAULT_SKILLS}
         stack={MOBILE_STACK}
         nextAvailableDate="Next week"
+        profileAvatar={siteLinks.profileImageUrl}
       />
     </div>
   );

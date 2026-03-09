@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:link": "supabase link --project-ref byttjuwuaozforaxgqvf",
-    "db:migrate": "supabase db push"
+    "db:link": "npx supabase link --project-ref byttjuwuaozforaxgqvf",
+    "db:migrate": "npx supabase db push"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
@@ -17,7 +17,7 @@
     "canvas-confetti": "^1.9.4",
     "framer-motion": "^11.11.17",
     "lucide-react": "^0.460.0",
-    "next": "14.2.18",
+    "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -27,8 +27,9 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
-    "eslint-config-next": "14.2.18",
+    "eslint-config-next": "^14.2.35",
     "postcss": "^8",
+    "supabase": "^2.77.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

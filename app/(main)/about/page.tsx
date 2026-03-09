@@ -5,10 +5,10 @@ import MobilePageShell from "@/components/mobile/MobilePageShell";
 export const metadata: Metadata = {
   title: "À propos",
   description:
-    "Présentation de Donald ADJINDA : parcours développeur, méthodologie, valeurs (clarté, qualité, partenariat). Full Stack, freelance.",
+    "Présentation de Donald ADJINDA : parcours EIG, stage RIXXID, compétences (Frontend, Backend, Laravel, React). Développeur web freelance.",
   openGraph: {
     title: "À propos | Donald ADJINDA",
-    description: "Parcours, compétences et valeurs. Développeur Full Stack disponible pour vos projets.",
+    description: "Parcours, compétences techniques et valeurs. Développeur web disponible pour vos projets.",
   },
 };
 

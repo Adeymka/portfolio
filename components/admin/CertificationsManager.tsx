@@ -2,45 +2,38 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Loader2, Award } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-const CATEGORIES = ["Frontend", "Backend", "Tools", "Design"] as const;
-
-export interface DbSkill {
+export interface DbCertification {
   id: string;
-  name: string;
-  category: string;
-  level: number;
-  icon: string | null;
+  title: string;
+  issuer: string | null;
+  url: string | null;
+  image_url: string | null;
   display_order: number;
   is_active: boolean;
 }
 
-export default function SkillsManager({
-  initialSkills,
+export default function CertificationsManager({
+  initialCertifications,
 }: {
-  initialSkills: DbSkill[];
+  initialCertifications: DbCertification[];
 }) {
-  const [skills, setSkills] = useState<DbSkill[]>(initialSkills);
+  const [certs, setCerts] = useState<DbCertification[]>(initialCertifications);
   const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState<DbSkill | null>(null);
+  const [editing, setEditing] = useState<DbCertification | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const supabase = createClient();
 
-  const byCategory = CATEGORIES.map((cat) => ({
-    category: cat,
-    items: skills.filter((s) => s.category === cat),
-  }));
-
   const refresh = useCallback(async () => {
     const { data } = await supabase
-      .from("skills")
+      .from("certifications")
       .select("*")
-      .order("category")
-      .order("display_order", { ascending: true });
-    if (data) setSkills(data);
+      .order("display_order", { ascending: true })
+      .order("title", { ascending: true });
+    if (data) setCerts(data as DbCertification[]);
   }, [supabase]);
 
   useEffect(() => {
@@ -49,8 +42,8 @@ export default function SkillsManager({
 
   const handleDelete = async (id: string) => {
     try {
-      await supabase.from("skills").delete().eq("id", id);
-      setSkills((prev) => prev.filter((s) => s.id !== id));
+      await supabase.from("certifications").delete().eq("id", id);
+      setCerts((prev) => prev.filter((c) => c.id !== id));
       setDeleteConfirm(null);
     } catch (e) {
       console.error(e);
@@ -59,9 +52,9 @@ export default function SkillsManager({
 
   const handleToggleActive = async (id: string, is_active: boolean) => {
     try {
-      await supabase.from("skills").update({ is_active }).eq("id", id);
-      setSkills((prev) =>
-        prev.map((s) => (s.id === id ? { ...s, is_active } : s))
+      await supabase.from("certifications").update({ is_active }).eq("id", id);
+      setCerts((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, is_active } : c))
       );
     } catch (e) {
       console.error(e);
@@ -69,104 +62,85 @@ export default function SkillsManager({
   };
 
   return (
-    <div className="space-y-8">
-      {byCategory.map(({ category, items }) => (
-        <section
-          key={category}
-          className="rounded-lg border border-fb-border bg-fb-card p-5 shadow-card"
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-syne text-lg font-bold text-fb-text">
-              {category}
-            </h2>
-            <button
-              type="button"
-              onClick={() => {
-                setEditing(null);
-                setShowForm(true);
-                (window as unknown as { __skillCategory?: string }).__skillCategory = category;
-              }}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-fb-border px-3 py-1.5 text-sm font-medium text-fb-text hover:bg-fb-gray"
-            >
-              <Plus className="h-4 w-4" /> Ajouter
-            </button>
-          </div>
-          <ul className="space-y-3">
-            {items.length === 0 ? (
-              <li className="text-sm text-fb-text-secondary">
-                Aucune compétence.
-              </li>
-            ) : (
-              items.map((skill) => (
-                <li
-                  key={skill.id}
-                  className="flex items-center gap-4 rounded-lg border border-fb-border bg-fb-gray/30 p-3"
+    <div className="space-y-6">
+      <div className="rounded-lg border border-fb-border bg-fb-card p-5 shadow-card">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="font-syne text-lg font-bold text-fb-text">
+            Certifications
+          </h2>
+          <button
+            type="button"
+            onClick={() => {
+              setEditing(null);
+              setShowForm(true);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-fb-border px-3 py-1.5 text-sm font-medium text-fb-text hover:bg-fb-gray"
+          >
+            <Plus className="h-4 w-4" /> Ajouter
+          </button>
+        </div>
+        <ul className="space-y-3">
+          {certs.length === 0 ? (
+            <li className="text-sm text-fb-text-secondary">
+              Aucune certification. Ajoutez-en depuis Admin → Certifications.
+            </li>
+          ) : (
+            certs.map((cert) => (
+              <li
+                key={cert.id}
+                className="flex items-center gap-4 rounded-lg border border-fb-border bg-fb-gray/30 p-3"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-fb-blue/10 text-fb-blue">
+                  <Award className="h-5 w-5" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-fb-text">{cert.title}</p>
+                  {cert.issuer && (
+                    <p className="text-sm text-fb-text-secondary">
+                      {cert.issuer}
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleToggleActive(cert.id, !cert.is_active)}
+                  className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
+                    cert.is_active ? "bg-fb-blue" : "bg-fb-gray"
+                  }`}
                 >
-                  <span className="text-xl" aria-hidden>
-                    {skill.icon || "⚡"}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium text-fb-text">{skill.name}</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <div className="h-2 flex-1 max-w-[120px] overflow-hidden rounded-full bg-fb-gray">
-                        <div
-                          className="h-full rounded-full bg-fb-blue transition-all"
-                          style={{ width: `${skill.level}%` }}
-                        />
-                      </div>
-                      <span className="text-xs text-fb-text-secondary">
-                        {skill.level}%
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleToggleActive(skill.id, !skill.is_active)
-                    }
-                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-                      skill.is_active ? "bg-fb-blue" : "bg-fb-gray"
+                  <span
+                    className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                      cert.is_active ? "left-6" : "left-1"
                     }`}
-                  >
-                    <span
-                      className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-transform ${
-                        skill.is_active ? "left-6" : "left-1"
-                      }`}
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEditing(skill);
-                      setShowForm(true);
-                    }}
-                    className="rounded p-1.5 text-fb-text-secondary hover:bg-fb-gray hover:text-fb-text"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDeleteConfirm(skill.id)}
-                    className="rounded p-1.5 text-fb-text-secondary hover:bg-red-50 hover:text-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
-        </section>
-      ))}
+                  />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditing(cert);
+                    setShowForm(true);
+                  }}
+                  className="rounded p-1.5 text-fb-text-secondary hover:bg-fb-gray hover:text-fb-text"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeleteConfirm(cert.id)}
+                  className="rounded p-1.5 text-fb-text-secondary hover:bg-red-50 hover:text-red-600"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
 
       <AnimatePresence>
         {showForm && (
-          <SkillFormModal
-            skill={editing}
-            defaultCategory={
-              (typeof window !== "undefined"
-                ? (window as unknown as { __skillCategory?: string }).__skillCategory
-                : undefined) ?? "Frontend"
-            }
+          <CertificationFormModal
+            cert={editing}
             onClose={() => {
               setShowForm(false);
               setEditing(null);
@@ -185,7 +159,7 @@ export default function SkillsManager({
       <AnimatePresence>
         {deleteConfirm && (
           <ConfirmModal
-            title="Supprimer cette compétence ?"
+            title="Supprimer cette certification ?"
             message="Cette action est irréversible."
             onConfirm={() => handleDelete(deleteConfirm)}
             onCancel={() => setDeleteConfirm(null)}
@@ -245,45 +219,43 @@ function ConfirmModal({
   );
 }
 
-function SkillFormModal({
-  skill,
-  defaultCategory,
+function CertificationFormModal({
+  cert,
   onClose,
   onSaved,
   saving,
   setSaving,
 }: {
-  skill: DbSkill | null;
-  defaultCategory: string;
+  cert: DbCertification | null;
   onClose: () => void;
   onSaved: () => void;
   saving: boolean;
   setSaving: (v: boolean) => void;
 }) {
-  const [icon, setIcon] = useState(skill?.icon ?? "⚡");
-  const [name, setName] = useState(skill?.name ?? "");
-  const [category, setCategory] = useState(skill?.category ?? defaultCategory);
-  const [level, setLevel] = useState(skill?.level ?? 80);
-  const [is_active, setIsActive] = useState(skill?.is_active ?? true);
+  const [title, setTitle] = useState(cert?.title ?? "");
+  const [issuer, setIssuer] = useState(cert?.issuer ?? "");
+  const [url, setUrl] = useState(cert?.url ?? "");
+  const [image_url, setImageUrl] = useState(cert?.image_url ?? "");
+  const [is_active, setIsActive] = useState(cert?.is_active ?? true);
   const supabase = createClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || saving) return;
+    if (!title.trim() || saving) return;
     setSaving(true);
     try {
       const payload = {
-        name: name.trim(),
-        category,
-        level,
-        icon: icon || null,
+        title: title.trim(),
+        issuer: issuer.trim() || null,
+        url: url.trim() || null,
+        image_url: image_url.trim() || null,
         is_active,
-        display_order: skill?.display_order ?? 0,
+        display_order: cert?.display_order ?? 0,
       };
-      if (skill) {
-        await supabase.from("skills").update(payload).eq("id", skill.id);
+      if (cert) {
+        await supabase.from("certifications").update(payload).eq("id", cert.id);
       } else {
-        await supabase.from("skills").insert(payload);
+        await supabase.from("certifications").insert(payload);
       }
       onSaved();
     } catch (err) {
@@ -310,7 +282,7 @@ function SkillFormModal({
       >
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-syne text-lg font-bold text-fb-text">
-            {skill ? "Modifier la compétence" : "Nouvelle compétence"}
+            {cert ? "Modifier la certification" : "Nouvelle certification"}
           </h3>
           <button
             type="button"
@@ -323,53 +295,49 @@ function SkillFormModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="mb-1 block text-sm font-medium text-fb-text">
-              Icône (emoji)
+              Titre *
             </label>
             <input
-              value={icon}
-              onChange={(e) => setIcon(e.target.value)}
-              placeholder="⚡"
-              className="w-full rounded-lg border border-fb-border bg-fb-input-bg px-4 py-2 text-fb-text focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-fb-text">
-              Nom *
-            </label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               required
+              placeholder="ex. Meta Front-End Developer"
               className="w-full rounded-lg border border-fb-border bg-fb-input-bg px-4 py-2 text-fb-text focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
             />
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-fb-text">
-              Catégorie
+              Organisme / Émetteur
             </label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
+            <input
+              value={issuer}
+              onChange={(e) => setIssuer(e.target.value)}
+              placeholder="ex. Coursera, Meta"
               className="w-full rounded-lg border border-fb-border bg-fb-input-bg px-4 py-2 text-fb-text focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+            />
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium text-fb-text">
-              Niveau: {level}%
+              Lien (URL)
             </label>
             <input
-              type="range"
-              min={0}
-              max={100}
-              value={level}
-              onChange={(e) => setLevel(Number(e.target.value))}
-              className="w-full accent-fb-blue"
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://..."
+              className="w-full rounded-lg border border-fb-border bg-fb-input-bg px-4 py-2 text-fb-text focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-fb-text">
+              URL de l’image (badge)
+            </label>
+            <input
+              type="url"
+              value={image_url}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="https://..."
+              className="w-full rounded-lg border border-fb-border bg-fb-input-bg px-4 py-2 text-fb-text focus:border-fb-blue focus:outline-none focus:ring-1 focus:ring-fb-blue"
             />
           </div>
           <label className="flex items-center gap-2">
@@ -378,7 +346,7 @@ function SkillFormModal({
               checked={is_active}
               onChange={(e) => setIsActive(e.target.checked)}
             />
-            <span className="text-sm text-fb-text">Active</span>
+            <span className="text-sm text-fb-text">Visible sur le site</span>
           </label>
           <div className="flex gap-3 pt-4">
             <button

@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
-import { Pencil, MapPin, Globe, Briefcase } from "lucide-react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { Pencil, MapPin, Globe, Briefcase, X } from "lucide-react";
 import { BLUR_DATA_URL } from "@/lib/constants";
+import MatrixRain from "@/components/sections/MatrixRain";
 
 const FLOAT_PARTICLES = [
   { size: 6, left: "15%", top: "30%", delay: 0, anim: "floatParticle" },
@@ -15,7 +16,7 @@ const FLOAT_PARTICLES = [
   { size: 4, left: "55%", top: "75%", delay: 0.8, anim: "floatParticleAlt" },
 ];
 
-const STAT_LABELS = ["Projects Delivered", "Years Experience", "Happy Clients"] as const;
+const STAT_LABELS = ["Projets réalisés", "Années d'exp.", "Clients satisfaits"] as const;
 
 function useCountUp(end: number, durationMs = 1500, startOnMount = true) {
   const [count, setCount] = useState(0);
@@ -46,8 +47,8 @@ export interface ProfileHeaderProps {
 
 export default function ProfileHeader({
   name = "Donald ADJINDA",
-  title = "Full Stack Developer · Freelance",
-  location = "Paris, France",
+  title = "Développeur Web · Freelance",
+  location = "Abomey-Calavi, Bénin",
   website = "yoursite.com",
   profileImage = null,
   projectsCount = 24,
@@ -55,8 +56,18 @@ export default function ProfileHeader({
   happyClients = 18,
 }: ProfileHeaderProps) {
   const [coverHover, setCoverHover] = useState(false);
+  const [profileImageOpen, setProfileImageOpen] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
   const statsInView = useInView(statsRef, { once: true, amount: 0.5 });
+
+  useEffect(() => {
+    if (!profileImageOpen) return;
+    const onEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setProfileImageOpen(false);
+    };
+    window.addEventListener("keydown", onEscape);
+    return () => window.removeEventListener("keydown", onEscape);
+  }, [profileImageOpen]);
   const projects = useCountUp(projectsCount, 1500, statsInView);
   const years = useCountUp(yearsExperience, 1500, statsInView);
   const clients = useCountUp(happyClients, 1500, statsInView);
@@ -81,21 +92,7 @@ export default function ProfileHeader({
           backgroundSize: "24px 24px",
         }}
       >
-        {/* Floating particles */}
-        {FLOAT_PARTICLES.map((p, i) => (
-          <span
-            key={i}
-            className="absolute rounded-full bg-white opacity-30"
-            style={{
-              width: p.size,
-              height: p.size,
-              left: p.left,
-              top: p.top,
-              animation: `${p.anim} ${4 + (i % 3)}s ease-in-out infinite`,
-              animationDelay: `${p.delay}s`,
-            }}
-          />
-        ))}
+        <MatrixRain />
 
         {/* Edit cover button — visible on hover */}
         <motion.button
@@ -114,40 +111,91 @@ export default function ProfileHeader({
       {/* Content container: overlap avatar + info */}
       <div className="px-5 md:px-8 lg:px-10">
         <div className="relative -mt-[50px] md:-mt-[75px]">
-          {/* Profile picture */}
+          {/* Profile picture — clic pour agrandir */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
             className="relative inline-block"
           >
-            <div
-              className="relative h-[100px] w-[100px] overflow-hidden rounded-full border-4 border-white bg-fb-gray shadow-[0_2px_8px_rgba(0,0,0,0.2)] md:h-[150px] md:w-[150px]"
-              style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}
+            <button
+              type="button"
+              onClick={() => profileImage && setProfileImageOpen(true)}
+              className="relative block cursor-pointer rounded-full outline-none ring-0 focus-visible:ring-2 focus-visible:ring-fb-blue focus-visible:ring-offset-2"
+              aria-label="Voir la photo de profil en grand"
             >
-              {profileImage ? (
-                <Image
-                  src={profileImage}
-                  alt={name}
-                  fill
-                  className="object-cover"
-                  placeholder="blur"
-                  blurDataURL={BLUR_DATA_URL}
-                  unoptimized={profileImage.startsWith("http")}
-                  sizes="150px"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-fb-blue-light font-syne text-3xl font-bold text-fb-blue md:text-4xl">
-                  {name.charAt(0)}
-                </div>
-              )}
-            </div>
-            {/* Green online dot */}
-            <span
-              className="absolute bottom-1 right-1 h-5 w-5 rounded-full border-[3px] border-white bg-fb-green animate-pulse-dot md:bottom-2 md:right-2 md:h-[20px] md:w-[20px]"
-              aria-hidden
-            />
+              <div
+                className="relative h-[100px] w-[100px] overflow-hidden rounded-full border-4 border-white bg-fb-gray shadow-[0_2px_8px_rgba(0,0,0,0.2)] md:h-[150px] md:w-[150px] transition-transform hover:scale-[1.02]"
+                style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.2)" }}
+              >
+                {profileImage ? (
+                  <Image
+                    src={profileImage}
+                    alt={name}
+                    fill
+                    className="object-cover"
+                    placeholder="blur"
+                    blurDataURL={BLUR_DATA_URL}
+                    unoptimized={profileImage.startsWith("http")}
+                    sizes="150px"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-fb-blue-light font-syne text-3xl font-bold text-fb-blue md:text-4xl">
+                    {name.charAt(0)}
+                  </div>
+                )}
+              </div>
+              {/* Green online dot */}
+              <span
+                className="absolute bottom-1 right-1 h-5 w-5 rounded-full border-[3px] border-white bg-fb-green animate-pulse-dot md:bottom-2 md:right-2 md:h-[20px] md:w-[20px]"
+                aria-hidden
+              />
+            </button>
           </motion.div>
+
+          {/* Lightbox photo de profil (style Facebook) */}
+          <AnimatePresence>
+            {profileImageOpen && profileImage && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+                onClick={() => setProfileImageOpen(false)}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Photo de profil en grand"
+              >
+                <button
+                  type="button"
+                  onClick={() => setProfileImageOpen(false)}
+                  className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  aria-label="Fermer"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="relative max-h-[85vh] max-w-[85vw]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Image
+                    src={profileImage}
+                    alt={`${name} — photo de profil`}
+                    width={600}
+                    height={600}
+                    className="max-h-[85vh] w-auto rounded-lg object-contain shadow-2xl"
+                    unoptimized={profileImage.startsWith("http")}
+                    sizes="85vw"
+                  />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Info + buttons row: name left, buttons right on desktop */}
           <div className="mt-5 flex flex-col gap-5 pb-6 md:flex-row md:items-start md:justify-between md:gap-6 md:pb-8">

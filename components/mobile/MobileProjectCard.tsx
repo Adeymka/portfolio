@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MoreHorizontal, ThumbsUp, MessageCircle, ExternalLink } from "lucide-react";
+import Avatar from "@/components/ui/Avatar";
 import { BLUR_DATA_URL } from "@/lib/constants";
 import type { Project } from "@/lib/data";
 
@@ -18,6 +19,8 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export interface MobileProjectCardProps {
   project: Project & { slug?: string };
+  authorAvatar?: string | null;
+  authorName?: string;
 }
 
 function formatDate(d: Date) {
@@ -31,7 +34,11 @@ function formatDate(d: Date) {
   return new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
 }
 
-export default function MobileProjectCard({ project }: MobileProjectCardProps) {
+export default function MobileProjectCard({
+  project,
+  authorAvatar = null,
+  authorName = "Donald ADJINDA",
+}: MobileProjectCardProps) {
   const [expanded, setExpanded] = useState(false);
   const categoryColor = CATEGORY_COLORS[project.category] ?? CATEGORY_COLORS.default;
   const hasSlug = Boolean(project.slug?.trim());
@@ -40,9 +47,12 @@ export default function MobileProjectCard({ project }: MobileProjectCardProps) {
   return (
     <article className="border-b border-fb-border bg-fb-card lg:hidden">
       <div className="flex items-center gap-2 px-3 pt-3 pb-2">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-fb-blue font-syne text-sm font-bold text-white">
-          {project.title.charAt(0)}
-        </div>
+        <Avatar
+          src={authorAvatar}
+          alt={authorName}
+          size="sm"
+          className="h-9 w-9 shrink-0"
+        />
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium text-[15px] text-fb-text">{project.title}</p>
           <p className="text-xs text-fb-text-secondary">{project.category}</p>

@@ -14,6 +14,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   Backend: "#42B883",
   DevOps: "#E8A020",
   Design: "#E91E8C",
+  Tools: "#6366F1",
   default: "#65676B",
 };
 

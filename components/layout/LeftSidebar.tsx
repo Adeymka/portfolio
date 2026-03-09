@@ -16,7 +16,7 @@ export interface IntroData {
 
 export interface StackItem {
   name: string;
-  category: "Frontend" | "Backend" | "DevOps" | "Design";
+  category: "Frontend" | "Backend" | "DevOps" | "Design" | "Tools";
   icon?: string; // emoji or initials
 }
 
@@ -32,6 +32,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   Backend: "#42B883",
   DevOps: "#E8A020",
   Design: "#E91E8C",
+  Tools: "#6366F1",
   default: "#65676B",
 };
 
@@ -126,16 +127,16 @@ export default function LeftSidebar({
           <div className="flex items-center gap-2 py-1.5 text-[15px] text-fb-text">
             <Briefcase className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
             <span>
-              {intro.jobTitle} at {intro.company}
+              {intro.jobTitle} · {intro.company}
             </span>
           </div>
           <div className="flex items-center gap-2 py-1.5 text-[15px] text-fb-text">
             <GraduationCap className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
-            <span>Studied at {intro.school}</span>
+            <span>Études : {intro.school}</span>
           </div>
           <div className="flex items-center gap-2 py-1.5 text-[15px] text-fb-text">
             <MapPin className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
-            <span>Lives in {intro.location}</span>
+            <span>Lieu : {intro.location}</span>
           </div>
           <div className="flex items-center gap-2 py-1.5">
             <Link2 className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
@@ -150,7 +151,7 @@ export default function LeftSidebar({
           </div>
           <div className="flex items-center gap-2 py-1.5 text-[15px] text-fb-text-secondary">
             <Calendar className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
-            <span>Joined {intro.joinedDate}</span>
+            <span>Sur le web depuis {intro.joinedDate}</span>
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@ export interface ProjectFeedProps {
 
 export default function ProjectFeed({
   projects,
-  authorName = "You",
+  authorName = "Donald ADJINDA",
   authorAvatar = null,
 }: ProjectFeedProps) {
   const [activeFilter, setActiveFilter] = useState<string>("All");

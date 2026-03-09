@@ -1,10 +1,13 @@
 "use client";
 
+import Avatar from "@/components/ui/Avatar";
 import MobileProjectCard from "./MobileProjectCard";
 import type { Project } from "@/lib/data";
 
 export interface MobileProjectFeedProps {
   projects: (Project & { slug?: string })[];
+  authorAvatar?: string | null;
+  authorName?: string;
 }
 
 function EmptyIllustration() {
@@ -55,13 +58,20 @@ function EmptyIllustration() {
   );
 }
 
-export default function MobileProjectFeed({ projects }: MobileProjectFeedProps) {
+export default function MobileProjectFeed({
+  projects,
+  authorAvatar = null,
+  authorName = "Donald ADJINDA",
+}: MobileProjectFeedProps) {
   return (
     <div className="lg:hidden">
       <div className="flex items-center gap-2 border-b border-fb-border bg-fb-card px-3 py-2.5">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-fb-blue font-syne text-sm font-bold text-white">
-          P
-        </div>
+        <Avatar
+          src={authorAvatar}
+          alt={authorName}
+          size="sm"
+          className="h-8 w-8 shrink-0"
+        />
         <div className="min-w-0 flex-1 rounded-full bg-fb-gray px-4 py-2 text-sm text-fb-text-secondary">
           Quoi de neuf ?
         </div>
@@ -74,7 +84,14 @@ export default function MobileProjectFeed({ projects }: MobileProjectFeedProps) 
           </p>
         </div>
       ) : (
-        projects.map((p) => <MobileProjectCard key={p.id} project={p} />)
+        projects.map((p) => (
+          <MobileProjectCard
+            key={p.id}
+            project={p}
+            authorAvatar={authorAvatar}
+            authorName={authorName}
+          />
+        ))
       )}
     </div>
   );

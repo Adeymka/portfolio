@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Search, Bell } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { siteLinks } from "@/lib/site-content";
 
 export interface MobileNavbarProps {
   siteName?: string;
@@ -11,7 +13,7 @@ export interface MobileNavbarProps {
 }
 
 export default function MobileNavbar({
-  siteName = "Portfolio",
+  siteName = "Mr Adeymka",
   profileAvatar = null,
 }: MobileNavbarProps) {
   return (
@@ -21,10 +23,16 @@ export default function MobileNavbar({
     >
       <Link
         href="/"
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-fb-blue font-syne text-sm font-bold text-white"
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden"
         aria-label={siteName}
       >
-        {siteName.charAt(0)}
+        <Image
+          src={siteLinks.logoUrl}
+          alt=""
+          width={32}
+          height={32}
+          className="h-8 w-8 object-contain"
+        />
       </Link>
       <form action="/projects" method="get" className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-fb-input-bg px-3 py-1.5" role="search">
         <Search className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -78,7 +78,7 @@ export default function ProjectsManager({
       (p.stack && p.stack.some((t) => t.toLowerCase().includes(search.toLowerCase())))
   );
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from("projects")
@@ -87,11 +87,11 @@ export default function ProjectsManager({
       .order("created_at", { ascending: false });
     if (data) setProjects(data);
     setLoading(false);
-  };
+  }, [supabase]);
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [refresh]);
 
   const handleToggle = async (
     id: string,

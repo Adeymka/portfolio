@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, FolderOpen, Zap, Mail, FileText, LogOut } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Zap, Award, Mail, FileText, Settings, LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 
@@ -10,8 +10,10 @@ const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/projects", label: "Projets", icon: FolderOpen },
   { href: "/admin/skills", label: "Skills", icon: Zap },
+  { href: "/admin/certifications", label: "Certifications", icon: Award },
   { href: "/admin/messages", label: "Messages", icon: Mail },
   { href: "/admin/documents", label: "Documents", icon: FileText },
+  { href: "/admin/settings", label: "Paramètres", icon: Settings },
 ] as const;
 
 export default function AdminLayout({

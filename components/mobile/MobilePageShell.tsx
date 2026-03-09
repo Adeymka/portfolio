@@ -6,15 +6,16 @@ import BottomNav from "./BottomNav";
 import MobileLeftSheet from "./MobileLeftSheet";
 import type { IntroData, StackItem } from "@/components/layout/LeftSidebar";
 import type { Skill } from "@/lib/data";
+import { siteLinks } from "@/lib/site-content";
 
 const MOBILE_INTRO: IntroData = {
-  bio: "I build web apps that users love.",
-  jobTitle: "Full Stack Developer",
+  bio: "Passionné par la création d'applications web modernes et performantes.",
+  jobTitle: "Développeur Web",
   company: "Freelance",
-  school: "École 42",
-  location: "Paris, France",
-  website: "https://yoursite.com",
-  joinedDate: "March 2024",
+  school: "École Internationale de Graphisme (EIG)",
+  location: "Abomey-Calavi, Bénin",
+  website: "https://mykerobert3-arch.github.io/DonaldPortfolio/",
+  joinedDate: "2024",
 };
 
 const MOBILE_STACK: StackItem[] = [
@@ -43,7 +44,7 @@ export default function MobilePageShell({ children }: { children: React.ReactNod
       className="flex min-h-screen flex-col bg-fb-gray lg:hidden"
       style={{ paddingBottom: "calc(56px + env(safe-area-inset-bottom))" }}
     >
-      <MobileNavbar />
+      <MobileNavbar profileAvatar={siteLinks.profileImageUrl} />
       <main className="flex-1 overflow-y-auto">{children}</main>
       <BottomNav onMoreClick={() => setSheetOpen(true)} />
       <MobileLeftSheet
@@ -53,6 +54,7 @@ export default function MobilePageShell({ children }: { children: React.ReactNod
         skills={DEFAULT_SKILLS}
         stack={MOBILE_STACK}
         nextAvailableDate="Next week"
+        profileAvatar={siteLinks.profileImageUrl}
       />
     </div>
   );

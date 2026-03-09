@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
-import ConditionalShell from "@/components/layout/ConditionalShell";
 import { THEME_SCRIPT } from "./theme-script";
 import { getSameAsUrls } from "@/lib/site-content";
 import "./globals.css";
@@ -35,12 +34,15 @@ const baseUrl = getBaseUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
+  icons: {
+    icon: "/image/logo-removebg-preview.png",
+  },
   title: {
-    default: "Donald ADJINDA — Développeur Full Stack",
+    default: "Donald ADJINDA — Développeur Web",
     template: "%s | Donald ADJINDA",
   },
   description:
-    "Portfolio de Donald ADJINDA, développeur Full Stack. Projets React, Next.js, Node.js. Contact et réalisations.",
+    "Portfolio de Donald ADJINDA, développeur web. Projets React, Next.js, Laravel. EIG, stage RIXXID. Contact et réalisations.",
   openGraph: {
     type: "website",
     locale: "fr_FR",
@@ -69,17 +71,17 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Donald ADJINDA",
-              jobTitle: "Développeur Full Stack",
+              jobTitle: "Développeur Web",
               url: baseUrl,
               description:
-                "Portfolio Full Stack. Projets React, Next.js, Node.js. Disponible pour missions freelance et CDI.",
+                "Portfolio développeur web. React, Next.js, Laravel. Diplômé EIG, stage RIXXID. Disponible pour missions et collaborations.",
               sameAs: getSameAsUrls(),
             }),
           }}
         />
       </head>
       <body className="min-h-screen bg-fb-gray font-dm-sans text-fb-text antialiased" suppressHydrationWarning>
-        <ConditionalShell>{children}</ConditionalShell>
+        {children}
       </body>
     </html>
   );

@@ -7,7 +7,7 @@ import { siteLinks } from "@/lib/site-content";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contactez Donald ADJINDA pour votre projet web. Formulaire de contact, réponse sous 24h. Full Stack, React, Next.js.",
+    "Contactez Donald ADJINDA pour votre projet web. Formulaire de contact, réponse sous 24h. Développeur web, React, Next.js, Laravel.",
   openGraph: {
     title: "Contact | Donald ADJINDA",
     description: "Envoyez un message. Réponse garantie sous 24h.",
@@ -29,8 +29,12 @@ export default function ContactPage() {
         <main className="min-h-[calc(100vh-56px)] h-[calc(100vh-56px)]">
           <ContactPageContent
           email={siteLinks.email}
+          phone={siteLinks.phone}
+          phoneTel={siteLinks.phoneE164}
+          whatsappUrl={siteLinks.whatsappUrl}
           linkedInUrl={siteLinks.linkedInUrl}
           cvUrl={siteLinks.cvUrl}
+          avatar={siteLinks.profileImageUrl}
         />
         </main>
       </div>

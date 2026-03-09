@@ -29,8 +29,9 @@ Créer un fichier `.env.local` à la racine (voir `.env.example`) :
 
 | Variable | Obligatoire | Description |
 |----------|--------------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Oui | URL du projet Supabase |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Oui | Clé anonyme Supabase |
+| `NEXT_PUBLIC_SUPABASE_URL` | Oui | URL du projet Supabase (Dashboard → Settings → API) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Oui | Clé anonyme Supabase (Dashboard → Settings → API) |
+| `NEXT_PUBLIC_SITE_URL` | En prod | URL publique du site (ex. `https://ton-site.vercel.app`) pour sitemap, robots, SEO |
 | `ANTHROPIC_API_KEY` | Non | Génération de lettres de motivation (admin) |
 | `RESEND_API_KEY` | Non | Envoi d’emails (notifications) |
 | `ADMIN_EMAIL` | Non | Email admin pour notifications |
@@ -74,13 +75,41 @@ Modifier `lib/site-content.ts` pour mettre à jour :
 
 ---
 
-## Déploiement
+## Déploiement (Vercel)
 
-Adapté à **Vercel** (ou tout hébergeur Node) :
+### 1. Pousser le code
 
-1. Configurer les variables d’environnement (voir tableau ci-dessus).
-2. Optionnel : `NEXT_PUBLIC_SITE_URL` (URL publique du site) pour sitemap et robots.
-3. Build : `npm run build` puis `npm run start` (ou déploiement automatique Vercel).
+- Créer un dépôt sur GitHub (ou GitLab / Bitbucket).
+- À la racine : `git init`, `git add .`, `git commit -m "Portfolio"`, puis `git remote add origin <url>` et `git push -u origin main`.
+- Vérifier que `.env.local` n’est **pas** commité (voir `.gitignore`).
+
+### 2. Créer le projet sur Vercel
+
+1. [vercel.com](https://vercel.com) → **Add New…** → **Project** → importer le dépôt.
+2. **Framework** : Next.js (détecté). **Build** : `npm run build`. Lancer le déploiement.
+
+### 3. Variables d’environnement (Vercel)
+
+Dans le projet Vercel → **Settings** → **Environment Variables**, ajouter :
+
+| Variable | Exemple | Environnement |
+|----------|--------|----------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xxxxx.supabase.co` | Production, Preview |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJ...` (clé anon) | Production, Preview |
+| `NEXT_PUBLIC_SITE_URL` | `https://ton-site.vercel.app` (ou ton domaine) | Production |
+
+Puis **Redeploy** le projet pour prendre en compte les variables.
+
+### 4. Base Supabase (si pas déjà fait)
+
+- **Lier** : `npm run db:link` (mot de passe DB dans Supabase → Settings → Database).
+- **Migrer** : `npm run db:migrate`.
+- **Admin** : Supabase → **Authentication** → **Users** → **Add user** (email + mot de passe pour se connecter à `/admin`).
+
+### 5. Après déploiement
+
+- Vérifier `lib/site-content.ts` (email, téléphone, photo, liens).
+- Se connecter à `https://ton-site.vercel.app/admin` et remplir projets, compétences, certifications.
 
 ---
 

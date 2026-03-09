@@ -22,8 +22,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# local env files (ne pas committer les secrets ; .env.example peut rester)
 .env
+.env.local
 .env*.local
 
 # cursor

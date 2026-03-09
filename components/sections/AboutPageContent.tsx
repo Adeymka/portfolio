@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import SectionTitle from "@/components/SectionTitle";
+import { siteLinks } from "@/lib/site-content";
 import {
-  User,
   Code2,
   Rocket,
   Target,
@@ -24,75 +25,87 @@ import {
 
 const TIMELINE = [
   {
-    year: "2018",
-    title: "First lines of code",
+    year: "EIG",
+    title: "Formation en développement web",
     description:
-      "Started with Python and web basics. Built small scripts and fell in love with turning ideas into something people could use.",
+      "Diplômé de l'École Internationale de Graphisme (EIG). Bases solides en création d’interfaces et en développement web.",
     Icon: Code2,
   },
   {
-    year: "2020",
-    title: "Full-stack shift",
+    year: "RIXXID",
+    title: "Stage développeur (3 mois)",
     description:
-      "Moved to JavaScript and Node.js. Shipped first production apps and learned how to work with clients and iterate fast.",
+      "Développement d’une plateforme de gestion d’école : interface formateur (web) et interface étudiant (mobile). Mise en pratique en conditions réelles.",
     Icon: Rocket,
   },
   {
-    year: "2022",
-    title: "Going independent",
+    year: "Aujourd’hui",
+    title: "Développeur web freelance",
     description:
-      "Went freelance to focus on product work: SaaS, e-commerce, and clean architecture. Prioritized delivery and long-term maintainability.",
-    Icon: Target,
+      "Je continue de me former aux nouvelles technologies (React, Next.js, Tailwind, Laravel) et je suis disponible pour vos projets web et applications.",
+    Icon: Sparkles,
+  },
+];
+
+const COMPETENCES = [
+  {
+    title: "Frontend",
+    items: "HTML5, CSS3, JavaScript, React, Bootstrap, Tailwind",
   },
   {
-    year: "2024",
-    title: "Today",
-    description:
-      "Building products that make a difference — from dashboards to storefronts. Still learning, still shipping.",
-    Icon: Sparkles,
+    title: "Backend",
+    items: "PHP / Laravel, MySQL, API REST (bases)",
+  },
+  {
+    title: "Mobile",
+    items: "Formation prévue (React Native)",
+  },
+  {
+    title: "Outils",
+    items: "Git / GitHub",
   },
 ];
 
 const VALUES = [
   {
     Icon: Target,
-    title: "Clarity first",
-    description: "I align on goals and constraints before writing code. Fewer surprises, better outcomes.",
+    title: "Clarté d’abord",
+    description: "J’aligne les objectifs et contraintes avant de coder. Moins de surprises, de meilleurs résultats.",
   },
   {
     Icon: Zap,
-    title: "Speed & quality",
-    description: "Ship often without cutting corners. Clean code and tests so we can move fast later.",
+    title: "Rapidité et qualité",
+    description: "Livrer souvent sans sacrifier la qualité. Code propre pour avancer sereinement.",
   },
   {
     Icon: Handshake,
-    title: "Partnership",
-    description: "You're the expert in your domain. I bring tech and product sense. We decide together.",
+    title: "Partenariat",
+    description: "Vous êtes l’expert de votre domaine. J’apporte la technique. On décide ensemble.",
   },
   {
     Icon: Ruler,
-    title: "Simple by default",
-    description: "I choose boring tech when it fits. Fancy when it actually solves the problem.",
+    title: "Simple par défaut",
+    description: "J’utilise les bons outils au bon moment, sans complexité inutile.",
   },
   {
     Icon: Lock,
-    title: "Transparent process",
-    description: "Clear timelines, regular updates, and no black boxes. You always know where we stand.",
+    title: "Transparence",
+    description: "Délais clairs, mises à jour régulières. Vous savez toujours où on en est.",
   },
   {
     Icon: Sprout,
-    title: "Built to last",
-    description: "Code that your team can own and evolve. Documentation and structure matter.",
+    title: "Durable",
+    description: "Code que vous ou votre équipe pourrez faire évoluer. Structure et lisibilité comptent.",
   },
 ];
 
 const ENJOY_ITEMS = [
-  { Icon: BookOpen, label: "Books" },
-  { Icon: Music, label: "Music" },
-  { Icon: Plane, label: "Travel" },
-  { Icon: Coffee, label: "Coffee" },
-  { Icon: Gamepad2, label: "Games" },
-  { Icon: Camera, label: "Photos" },
+  { Icon: BookOpen, label: "Livres" },
+  { Icon: Music, label: "Musique" },
+  { Icon: Plane, label: "Voyage" },
+  { Icon: Coffee, label: "Café" },
+  { Icon: Gamepad2, label: "Jeux" },
+  { Icon: Camera, label: "Photo" },
 ];
 
 const viewport = { once: true, amount: 0.2 };
@@ -115,8 +128,15 @@ export default function AboutPageContent() {
               transform: "rotate(-2deg)",
             }}
           >
-            <div className="aspect-[4/5] w-full flex items-center justify-center bg-fb-blue-light text-fb-blue">
-              <User className="h-32 w-32 md:h-40 md:w-40" strokeWidth={1.25} />
+            <div className="aspect-[4/5] relative w-full bg-fb-blue-light">
+              <Image
+                src={siteLinks.profileImageUrl}
+                alt="Donald ADJINDA — Développeur web"
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 768px) 100vw, 28rem"
+                priority
+              />
             </div>
           </div>
         </motion.div>
@@ -126,13 +146,10 @@ export default function AboutPageContent() {
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <h1 className="font-syne text-3xl font-bold text-fb-text md:text-[44px] md:leading-tight">
-            I build products that make a difference
+            Développeur web passionné par les solutions numériques
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-fb-text-secondary md:text-xl">
-            I’m a full-stack developer who cares as much about the problem we’re
-            solving as the code we write. I’ve shipped SaaS, e-commerce, and
-            everything in between — always with an eye on clarity, speed, and
-            long-term maintainability.
+            Diplômé de l’École Internationale de Graphisme (EIG), j’ai effectué un stage de 3 mois chez RIXXID où j’ai développé une plateforme de gestion d’école. Je continue de me former aux nouvelles technologies et je transforme vos idées en applications web modernes et performantes.
           </p>
         </motion.div>
       </section>
@@ -147,19 +164,10 @@ export default function AboutPageContent() {
           className="space-y-6 text-fb-text-secondary leading-relaxed"
         >
           <p>
-            I didn’t start out as a developer. I stumbled into code while trying
-            to automate something tedious, and it stuck. What I love most isn’t
-            the syntax — it’s turning a messy real-world problem into something
-            that works, that people actually use, and that doesn’t fall apart
-            in six months.
+            Passionné par la création d’applications web modernes et performantes, j’aime transformer des idées en solutions numériques concrètes. Mon parcours à l’EIG et mon stage chez RIXXID m’ont donné une base solide en développement web et en travail en équipe.
           </p>
           <p>
-            I’ve worked with startups and small teams where every decision
-            matters. That taught me to ask “why” before “how,” to ship often, and
-            to keep the stack simple until there’s a real reason to complicate
-            it. I’m driven by the idea that good software should feel invisible:
-            it just works, and the human on the other side can focus on their
-            job, not on the tool.
+            Je m’investis dans des projets variés — sites vitrines, plateformes de gestion, interfaces utilisateur — en privilégiant la clarté du code et l’expérience utilisateur. Je continue d’apprendre (React, Next.js, Tailwind, Laravel, React Native à venir) pour proposer des réalisations à la hauteur de vos besoins.
           </p>
         </motion.div>
 
@@ -170,15 +178,36 @@ export default function AboutPageContent() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mt-12 border-l-4 border-fb-blue pl-6 text-center text-2xl italic text-fb-text md:text-[24px]"
         >
-          “I’d rather build one thing that lasts than ten that look good on a
-          demo and break in production.”
+          “Je transforme vos idées en solutions numériques innovantes.”
         </motion.blockquote>
+      </section>
+
+      {/* COMPÉTENCES TECHNIQUES */}
+      <section className="mx-auto max-w-3xl px-4 py-16 md:px-6 md:py-20">
+        <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
+          Compétences techniques
+        </SectionTitle>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          {COMPETENCES.map((block, i) => (
+            <motion.div
+              key={block.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewport}
+              transition={{ duration: 0.4, delay: 0.05 * i }}
+              className="rounded-xl border border-fb-border bg-fb-card p-5 shadow-card"
+            >
+              <h3 className="font-syne text-lg font-bold text-fb-text">{block.title}</h3>
+              <p className="mt-2 text-sm text-fb-text-secondary">{block.items}</p>
+            </motion.div>
+          ))}
+        </div>
       </section>
 
       {/* JOURNEY TIMELINE */}
       <section className="mx-auto max-w-3xl px-4 py-16 md:px-6 md:py-20">
         <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
-          Journey
+          Parcours
         </SectionTitle>
         <div className="relative mt-10 pl-8 md:pl-10">
           {/* Dashed line */}
@@ -220,7 +249,7 @@ export default function AboutPageContent() {
       {/* VALUES — How I work */}
       <section className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-20">
         <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
-          How I work
+          Comment je travaille
         </SectionTitle>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {VALUES.map((value, i) => (
@@ -249,10 +278,10 @@ export default function AboutPageContent() {
       {/* WHAT I ENJOY — Instagram-style grid */}
       <section className="mx-auto max-w-4xl px-4 py-16 md:px-6 md:py-20">
         <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
-          Outside of code
+          En dehors du code
         </SectionTitle>
         <p className="mt-2 text-fb-text-secondary">
-          Books, music, travel — the things that keep me curious.
+          Livres, musique, voyage — ce qui me garde curieux.
         </p>
         <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-4">
           {ENJOY_ITEMS.map((item, i) => (
@@ -278,20 +307,20 @@ export default function AboutPageContent() {
       {/* CTA */}
       <section className="mx-auto max-w-2xl px-4 py-16 text-center md:py-20">
         <SectionTitle className="font-syne text-2xl font-bold text-fb-text md:text-3xl">
-          Ready to work together?
+          Prêt à collaborer ?
         </SectionTitle>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/projects"
             className="inline-flex items-center justify-center rounded-lg bg-fb-blue px-6 py-3 font-medium text-white shadow-card transition-all duration-200 hover:bg-fb-blue-dark hover:shadow-hover"
           >
-            See my work
+            Voir mes projets
           </Link>
           <Link
             href="/contact"
             className="inline-flex items-center justify-center rounded-lg border-2 border-fb-blue bg-fb-card px-6 py-3 font-medium text-fb-blue transition-all duration-200 hover:bg-fb-blue-light"
           >
-            Get in touch
+            Me contacter
           </Link>
         </div>
       </section>

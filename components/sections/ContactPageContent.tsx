@@ -28,6 +28,10 @@ export interface ContactPageContentProps {
   title?: string;
   email?: string;
   phone?: string;
+  /** Pour lien tel: (ex. +229156392567) */
+  phoneTel?: string;
+  /** Pour lien WhatsApp (ex. https://wa.me/229156392567) */
+  whatsappUrl?: string;
   linkedInUrl?: string;
   cvUrl?: string | null;
   clientsCount?: number;
@@ -38,9 +42,11 @@ export interface ContactPageContentProps {
 
 export default function ContactPageContent({
   name = "Donald ADJINDA",
-  title = "Full Stack Developer",
-  email = "hello@yoursite.com",
+  title = "Développeur Web",
+  email = "adjindaadeymkadonald@gmail.com",
   phone,
+  phoneTel,
+  whatsappUrl,
   linkedInUrl,
   cvUrl = null,
   clientsCount = 18,
@@ -182,13 +188,34 @@ export default function ContactPageContent({
             {email}
           </a>
           {phone && (
-            <a
-              href={`tel:${phone}`}
-              className="flex items-center gap-2 text-white/95 hover:underline"
-            >
-              <Phone className="h-4 w-4 shrink-0" />
-              {phone}
-            </a>
+            <div className="flex flex-col gap-1">
+              <span className="flex items-center gap-2 text-white/95">
+                <Phone className="h-4 w-4 shrink-0" />
+                {phone}
+              </span>
+              {(phoneTel || whatsappUrl) && (
+                <div className="ml-6 flex flex-wrap gap-3 text-sm">
+                  {phoneTel && (
+                    <a
+                      href={`tel:${phoneTel}`}
+                      className="text-white/90 underline hover:text-white"
+                    >
+                      Appel direct
+                    </a>
+                  )}
+                  {whatsappUrl && (
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white/90 underline hover:text-white"
+                    >
+                      WhatsApp
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
           )}
           {linkedInUrl && (
             <a

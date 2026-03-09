@@ -1,18 +1,20 @@
 "use client";
 
-import { Mail, Github, Linkedin } from "lucide-react";
-import Avatar from "@/components/ui/Avatar";
-
-export interface PersonRef {
-  name: string;
-  avatar?: string | null;
-  linkedInUrl?: string | null;
-}
+import { Mail, Github, Linkedin, Award } from "lucide-react";
+import { siteLinks } from "@/lib/site-content";
 
 export interface TrendingSkill {
   tag: string;
   count: string;
   label: string;
+}
+
+export interface CertificationItem {
+  id: string;
+  title: string;
+  issuer: string | null;
+  url: string | null;
+  image_url: string | null;
 }
 
 export interface RightSidebarProps {
@@ -23,34 +25,29 @@ export interface RightSidebarProps {
   nextAvailableSlot?: string;
   /** Mon–Fri availability: true = available (green), false = busy (gray) */
   weekAvailability?: [boolean, boolean, boolean, boolean, boolean];
-  people?: PersonRef[];
   trending?: TrendingSkill[];
+  /** Certifications affichées dans le bloc "Certifications" (ex-people you may know) */
+  certifications?: CertificationItem[];
 }
 
-const DEFAULT_PEOPLE: PersonRef[] = [
-  { name: "Marie Laurent", linkedInUrl: "https://linkedin.com" },
-  { name: "Thomas Dubois", linkedInUrl: "https://linkedin.com" },
-  { name: "Sophie Martin", linkedInUrl: "https://linkedin.com" },
-];
-
 const DEFAULT_TRENDING: TrendingSkill[] = [
-  { tag: "React", count: "24K", label: "developers" },
-  { tag: "Supabase", count: "8K", label: "projects" },
+  { tag: "React", count: "24K", label: "développeurs" },
+  { tag: "Supabase", count: "8K", label: "projets" },
   { tag: "Next.js", count: "18K", label: "repos" },
-  { tag: "TypeScript", count: "32K", label: "developers" },
+  { tag: "TypeScript", count: "32K", label: "développeurs" },
 ];
 
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+const WEEKDAYS = ["Lun", "Mar", "Mer", "Jeu", "Ven"];
 
 export default function RightSidebar({
   yourName = "Donald ADJINDA",
-  email = "hello@yoursite.com",
-  githubUrl = "https://github.com",
-  linkedInUrl = "https://linkedin.com",
-  nextAvailableSlot = "Mar 15",
+  email = siteLinks.email,
+  githubUrl = siteLinks.githubUrl,
+  linkedInUrl = siteLinks.linkedInUrl,
+  nextAvailableSlot = "15 mars",
   weekAvailability = [true, false, true, true, false],
-  people = DEFAULT_PEOPLE,
   trending = DEFAULT_TRENDING,
+  certifications = [],
 }: RightSidebarProps) {
   const initials = yourName
     .split(" ")
@@ -93,47 +90,10 @@ export default function RightSidebar({
         </a>
       </div>
 
-      {/* PEOPLE YOU MAY KNOW */}
-      <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
-        <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
-          People you may know
-        </h3>
-        <ul className="space-y-3">
-          {people.slice(0, 3).map((person) => (
-            <li key={person.name} className="flex items-center gap-3">
-              <Avatar
-                src={person.avatar ?? null}
-                alt={person.name}
-                size="md"
-                className="h-10 w-10 shrink-0"
-              />
-              <div className="min-w-0 flex-1">
-                <p className="font-dm-sans text-[15px] font-bold text-fb-text truncate">
-                  {person.name}
-                </p>
-                <p className="text-[13px] text-fb-text-secondary">
-                  worked with {yourName}
-                </p>
-              </div>
-              {person.linkedInUrl && (
-                <a
-                  href={person.linkedInUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="shrink-0 rounded-md bg-fb-blue px-3 py-1.5 text-[13px] font-medium text-white hover:bg-fb-blue-dark transition-colors"
-                >
-                  LinkedIn
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-
       {/* CONTACT INFO / AVAILABILITY */}
       <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
-          Contact Info
+          Informations de contact
         </h3>
         <div className="space-y-2 mb-4">
           <a
@@ -167,14 +127,14 @@ export default function RightSidebar({
           )}
         </div>
         <p className="text-[13px] text-fb-text-secondary mb-2">
-          Availability this week
+          Disponibilité cette semaine
         </p>
         <div className="flex gap-2 mb-3">
           {WEEKDAYS.map((day, i) => (
             <div
               key={day}
               className="flex flex-col items-center gap-1"
-              title={weekAvailability[i] ? "Available" : "Busy"}
+              title={weekAvailability[i] ? "Disponible" : "Occupé"}
             >
               <span
                 className={`h-2.5 w-2.5 rounded-full ${
@@ -186,14 +146,71 @@ export default function RightSidebar({
           ))}
         </div>
         <p className="text-[13px] font-medium text-fb-green">
-          Next available slot: {nextAvailableSlot}
+          Prochaine place disponible : {nextAvailableSlot}
         </p>
       </div>
+
+      {/* People you may know — affiche les certifications */}
+      {certifications.length > 0 && (
+        <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
+          <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
+            Certification
+          </h3>
+          <ul className="space-y-3">
+            {certifications.map((cert) => {
+              const content = (
+                <>
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-fb-blue-light text-fb-blue">
+                    {cert.image_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={cert.image_url}
+                        alt=""
+                        className="h-10 w-10 object-cover"
+                      />
+                    ) : (
+                      <Award className="h-5 w-5" />
+                    )}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[14px] font-medium text-fb-text truncate">
+                      {cert.title}
+                    </p>
+                    {cert.issuer && (
+                      <p className="text-[12px] text-fb-text-secondary truncate">
+                        {cert.issuer}
+                      </p>
+                    )}
+                  </div>
+                </>
+              );
+              return (
+                <li key={cert.id}>
+                  {cert.url ? (
+                    <a
+                      href={cert.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg py-2 px-2 -mx-2 hover:bg-fb-gray transition-colors"
+                    >
+                      {content}
+                    </a>
+                  ) : (
+                    <div className="flex items-center gap-3 rounded-lg py-2 px-2 -mx-2">
+                      {content}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
 
       {/* TRENDING SKILLS */}
       <div className="mb-4 rounded-lg border border-fb-border bg-fb-card p-4 shadow-card">
         <h3 className="font-dm-sans text-[17px] font-bold text-fb-text mb-3">
-          #Trending in your stack
+          #Trending dans ta pile
         </h3>
         <ul className="space-y-2">
           {trending.map((item) => (
