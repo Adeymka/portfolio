@@ -25,9 +25,11 @@ export default function MatrixRain() {
     if (!ctx) return;
 
     function initSize() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      const cols = Math.floor(canvas.width / FONT_SIZE);
+      const c = canvasRef.current;
+      if (!c) return;
+      c.width = c.offsetWidth;
+      c.height = c.offsetHeight;
+      const cols = Math.floor(c.width / FONT_SIZE);
       dropsRef.current = Array(cols).fill(1);
     }
 

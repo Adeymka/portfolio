@@ -161,7 +161,7 @@ export default function CoverTerminal() {
                   )}
                 </>
               )}
-              {(phase === "building" || phase === "preview") && (
+              {phase === "building" && (
                 <>
                   {BUILD_LINES.slice(0, buildLines).map((item, i) => (
                     <div key={i} className={item.color}>
