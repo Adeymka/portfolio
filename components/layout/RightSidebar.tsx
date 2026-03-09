@@ -43,7 +43,7 @@ const DEFAULT_TRENDING: TrendingSkill[] = [
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
 export default function RightSidebar({
-  yourName = "Your Name",
+  yourName = "Donald ADJINDA",
   email = "hello@yoursite.com",
   githubUrl = "https://github.com",
   linkedInUrl = "https://linkedin.com",
@@ -61,7 +61,7 @@ export default function RightSidebar({
 
   return (
     <aside
-      className="scrollbar-hide hidden w-[320px] shrink-0 overflow-y-auto rounded-lg xl:block"
+      className="scrollbar-hide hidden w-[320px] shrink-0 overflow-y-auto rounded-lg lg:block"
       style={{ position: "sticky", top: "72px", maxHeight: "calc(100vh - 88px)" }}
     >
       {/* SPONSORED CARD */}
@@ -70,7 +70,7 @@ export default function RightSidebar({
           Sponsored
         </p>
         <a
-          href="#hire"
+          href="/contact"
           className="block p-4 pt-0 hover:bg-fb-hover transition-colors"
         >
           <div
@@ -199,7 +199,7 @@ export default function RightSidebar({
           {trending.map((item) => (
             <li key={item.tag}>
               <a
-                href="#"
+                href={`/projects?q=${encodeURIComponent(item.tag)}`}
                 className="block rounded-lg py-2 px-2 -mx-2 text-[14px] text-fb-text hover:bg-fb-gray transition-colors"
               >
                 <span className="font-medium text-fb-blue">#{item.tag}</span>
@@ -216,21 +216,21 @@ export default function RightSidebar({
       {/* FOOTER LINKS */}
       <footer className="px-1 py-2">
         <div className="flex flex-wrap gap-x-2 gap-y-1 text-[12px] text-fb-text-secondary">
-          <a href="#" className="hover:underline">
+          <button type="button" className="hover:underline bg-transparent border-0 cursor-pointer p-0 text-inherit" title="À venir">
             Privacy
-          </a>
+          </button>
           <span>·</span>
-          <a href="#" className="hover:underline">
+          <button type="button" className="hover:underline bg-transparent border-0 cursor-pointer p-0 text-inherit" title="À venir">
             Terms
-          </a>
+          </button>
           <span>·</span>
-          <a href="#" className="hover:underline">
+          <a href="/about" className="hover:underline">
             About
           </a>
           <span>·</span>
-          <a href="#" className="hover:underline">
+          <button type="button" className="hover:underline bg-transparent border-0 cursor-pointer p-0 text-inherit" title="À venir">
             Cookies
-          </a>
+          </button>
         </div>
         <p className="mt-2 text-[12px] text-fb-text-secondary">
           © 2025 {yourName} · Made with ☕ and too much CSS

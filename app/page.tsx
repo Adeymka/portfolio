@@ -1,8 +1,53 @@
+import type { Metadata } from "next";
+import MobileLayout from "@/components/mobile/MobileLayout";
+import Navbar from "@/components/layout/Navbar";
 import ProfileHeader from "@/components/sections/ProfileHeader";
 import ProjectFeed from "@/components/sections/ProjectFeed";
 import LeftSidebar from "@/components/layout/LeftSidebar";
 import RightSidebar from "@/components/layout/RightSidebar";
+import { createStaticClient } from "@/lib/supabase/server";
+import { getActiveSkills } from "@/lib/supabase/queries";
 import type { Project } from "@/lib/data";
+
+export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Accueil",
+  description:
+    "Portfolio de Donald ADJINDA, développeur Full Stack. Projets React, Next.js, Node.js. Disponible pour missions freelance et CDI.",
+  openGraph: {
+    title: "Donald ADJINDA — Développeur Full Stack",
+    description:
+      "Portfolio et projets web. Full Stack, React, Next.js, Node.js. Contactez-moi pour votre projet.",
+  },
+};
+
+function mapRowToProject(row: {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  category: string | null;
+  stack: string[] | null;
+  image_url: string | null;
+  demo_url: string | null;
+  github_url: string | null;
+  created_at: string;
+}): Project {
+  return {
+    id: String(row.id),
+    title: row.title,
+    description: row.description ?? "",
+    stack: row.stack ?? [],
+    image: row.image_url ?? null,
+    liveUrl: row.demo_url ?? null,
+    githubUrl: row.github_url ?? null,
+    category: row.category ?? "",
+    reactions: { likes: 0, loves: 0, wows: 0 },
+    comments: [],
+    createdAt: new Date(row.created_at),
+  };
+}
 
 const SIDEBAR_INTRO = {
   bio: "I build web apps that users love. React, Node, and clean code are my daily bread.",
@@ -91,26 +136,50 @@ const SAMPLE_PROJECTS: Project[] = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const supabase = createStaticClient();
+  const [skillsResult, projectsResult] = await Promise.all([
+    getActiveSkills(),
+    supabase
+      .from("projects")
+      .select("id, title, slug, description, category, stack, image_url, demo_url, github_url, created_at")
+      .eq("published", true)
+      .order("display_order", { ascending: true }),
+  ]);
+  const skills = skillsResult.length > 0 ? skillsResult : SIDEBAR_SKILLS;
+  const projects =
+    projectsResult.data && projectsResult.data.length > 0
+      ? projectsResult.data.map(mapRowToProject)
+      : SAMPLE_PROJECTS;
   return (
-    <main className="min-h-screen p-4 pb-12 md:p-6">
-      <div className="mx-auto flex w-full max-w-[1540px] gap-6">
-        <LeftSidebar
-          intro={SIDEBAR_INTRO}
-          skills={SIDEBAR_SKILLS}
-          stack={SIDEBAR_STACK}
-          nextAvailableDate="Next week"
-        />
-        <div className="min-w-0 flex-1 space-y-6">
-          <div className="overflow-hidden rounded-2xl bg-fb-card shadow-card">
-            <ProfileHeader />
+    <>
+      {/* Desktop only */}
+      <div className="hidden lg:block">
+        <Navbar />
+        <main className="min-h-screen p-4 pb-12 md:p-6">
+          <div className="mx-auto flex w-full max-w-[1540px] gap-6">
+            <LeftSidebar
+              intro={SIDEBAR_INTRO}
+              skills={skills}
+              stack={SIDEBAR_STACK}
+              nextAvailableDate="Next week"
+            />
+            <div className="min-w-0 flex-1 space-y-6">
+              <div className="overflow-hidden rounded-2xl bg-fb-card shadow-card">
+                <ProfileHeader />
+              </div>
+              <div className="rounded-2xl bg-fb-card p-4 shadow-card md:p-6">
+                <ProjectFeed projects={projects} />
+              </div>
+            </div>
+            <RightSidebar yourName="Donald ADJINDA" nextAvailableSlot="Mar 15" />
           </div>
-          <div className="rounded-2xl bg-fb-card p-4 shadow-card md:p-6">
-            <ProjectFeed projects={SAMPLE_PROJECTS} />
-          </div>
-        </div>
-        <RightSidebar yourName="Your Name" nextAvailableSlot="Mar 15" />
+        </main>
       </div>
-    </main>
+      {/* Mobile + Tablet */}
+      <div className="lg:hidden">
+        <MobileLayout />
+      </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ProjectGalleryCard from "./ProjectGalleryCard";
 import type { Project } from "@/lib/data";
@@ -31,11 +32,17 @@ export default function ProjectsGallery({
   featuredIds = [],
   satisfiedClientsCount = 18,
 }: ProjectsGalleryProps) {
+  const searchParams = useSearchParams();
   const [category, setCategory] = useState<string>("All");
   const [sort, setSort] = useState<string>("recent");
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(9);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q != null && q.trim()) setSearch(q.trim());
+  }, [searchParams]);
 
   const categoriesCount = useMemo(
     () => new Set(projects.map((p) => p.category)).size,
@@ -218,7 +225,7 @@ export default function ProjectsGallery({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:auto-rows-[minmax(200px,auto)] xl:gap-5"
+              className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3 xl:auto-rows-[minmax(120px,auto)] xl:gap-3"
             >
               {visible.map((project, i) => (
                 <ProjectGalleryCard

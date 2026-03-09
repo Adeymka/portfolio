@@ -212,7 +212,7 @@ export default function LeftSidebar({
           Next available: {nextAvailableDate}
         </p>
         <a
-          href="#book"
+          href="/contact"
           className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-fb-blue bg-transparent py-2.5 font-dm-sans text-sm font-medium text-fb-blue transition-all duration-200 hover:bg-fb-blue-light"
         >
           Book a call

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import type { CaseStudy } from "@/lib/case-studies";
 import { getCategoryColor, getRelatedCaseStudies } from "@/lib/case-studies";
@@ -52,6 +53,27 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
   const [metaBarVisible, setMetaBarVisible] = useState(false);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [expandedHighlight, setExpandedHighlight] = useState<number | null>(null);
+  const [shareFeedback, setShareFeedback] = useState<string | null>(null);
+
+  const handleShare = useCallback(async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const title = caseStudy.title;
+    const text = (caseStudy.description || "").slice(0, 200) + (caseStudy.description && caseStudy.description.length > 200 ? "…" : "");
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title, text, url });
+        setShareFeedback("Shared!");
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+        setShareFeedback("Link copied!");
+      } else {
+        setShareFeedback("Link copied!");
+      }
+    } catch (err) {
+      if ((err as Error).name !== "AbortError") setShareFeedback("Could not share");
+    }
+    setTimeout(() => setShareFeedback(null), 2000);
+  }, [caseStudy.title, caseStudy.description]);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -79,10 +101,12 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
         className="relative aspect-video w-full overflow-hidden bg-fb-gray"
       >
         {caseStudy.image ? (
-          <img
+          <Image
             src={caseStudy.image}
             alt=""
-            className="h-full w-full object-cover"
+            fill
+            className="object-cover"
+            sizes="100vw"
           />
         ) : (
           <div
@@ -171,15 +195,50 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
             </div>
             <button
               type="button"
+              onClick={handleShare}
               className="rounded-lg border border-fb-border px-3 py-1.5 text-sm text-fb-text hover:bg-fb-hover"
             >
-              Share
+              {shareFeedback || "Share"}
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
       <div className="mx-auto max-w-3xl px-4 py-10 md:px-6">
+        {/* DESCRIPTION (courte, from DB) */}
+        {caseStudy.description && (
+          <section className="mb-16">
+            <p className="text-fb-text-secondary leading-relaxed">
+              {caseStudy.description}
+            </p>
+          </section>
+        )}
+
+        {/* LONG DESCRIPTION (from DB) */}
+        {caseStudy.longDescription && (
+          <section className="mb-16">
+            <p className="whitespace-pre-line text-fb-text-secondary leading-relaxed">
+              {caseStudy.longDescription}
+            </p>
+          </section>
+        )}
+
+        {/* CAHIER DES CHARGES (from DB) */}
+        <section className="mb-16">
+          <h2 className="font-syne text-xl font-bold text-fb-text md:text-2xl">
+            Cahier des charges
+          </h2>
+          {caseStudy.specs ? (
+            <p className="mt-4 whitespace-pre-line text-fb-text-secondary leading-relaxed">
+              {caseStudy.specs}
+            </p>
+          ) : (
+            <p className="mt-4 text-fb-text-secondary/70 italic">
+              Aucun cahier des charges renseigné pour ce projet.
+            </p>
+          )}
+        </section>
+
         {/* CHALLENGE */}
         {caseStudy.challenge && (
           <section className="mb-16">
@@ -197,21 +256,29 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
                 {caseStudy.challenge.beforeImage && (
                   <div>
                     <p className="mb-2 text-sm font-medium text-fb-text-secondary">Before</p>
-                    <img
-                      src={caseStudy.challenge.beforeImage}
-                      alt="Before"
-                      className="rounded-lg border border-fb-border"
-                    />
+                    <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-fb-border">
+                      <Image
+                        src={caseStudy.challenge.beforeImage}
+                        alt="Before"
+                        fill
+                        className="object-cover rounded-lg"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
                   </div>
                 )}
                 {caseStudy.challenge.afterImage && (
                   <div>
                     <p className="mb-2 text-sm font-medium text-fb-text-secondary">After</p>
-                    <img
-                      src={caseStudy.challenge.afterImage}
-                      alt="After"
-                      className="rounded-lg border border-fb-border"
-                    />
+                    <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-fb-border">
+                      <Image
+                        src={caseStudy.challenge.afterImage}
+                        alt="After"
+                        fill
+                        className="object-cover rounded-lg"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
@@ -229,11 +296,13 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
               {caseStudy.solution.body}
             </p>
             {caseStudy.solution.architectureImage && (
-              <div className="mt-6 rounded-lg border border-fb-border bg-fb-gray/50 p-4">
-                <img
+              <div className="relative mt-6 h-64 w-full overflow-hidden rounded-lg border border-fb-border bg-fb-gray/50 p-4 md:h-80">
+                <Image
                   src={caseStudy.solution.architectureImage}
                   alt="Architecture"
-                  className="w-full rounded-lg"
+                  fill
+                  className="object-contain rounded-lg"
+                  sizes="100vw"
                 />
               </div>
             )}
@@ -351,9 +420,9 @@ export default function CaseStudyPage({ caseStudy }: CaseStudyPageProps) {
                     key={i}
                     type="button"
                     onClick={() => setLightboxImage(src)}
-                    className="overflow-hidden rounded-lg border border-fb-border text-left"
+                    className="relative aspect-video w-full overflow-hidden rounded-lg border border-fb-border text-left"
                   >
-                    <img src={src} alt={`Screenshot ${i + 1}`} className="h-auto w-full object-cover" />
+                    <Image src={src} alt={`Screenshot ${i + 1}`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
                   </button>
                 ))}
               </div>

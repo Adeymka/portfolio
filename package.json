@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:link": "supabase link --project-ref byttjuwuaozforaxgqvf",
+    "db:migrate": "supabase db push"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.47.10",
     "canvas-confetti": "^1.9.4",
     "framer-motion": "^11.11.17",
     "lucide-react": "^0.460.0",

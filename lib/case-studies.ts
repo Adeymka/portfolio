@@ -37,6 +37,8 @@ export interface Testimonial {
 
 export interface CaseStudy extends Project {
   slug: string;
+  longDescription?: string | null;
+  specs?: string | null;
   role?: string;
   duration?: string;
   year?: string;

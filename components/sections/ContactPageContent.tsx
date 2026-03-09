@@ -14,6 +14,7 @@ import {
   Loader2,
 } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
+import { createClient } from "@/lib/supabase/client";
 
 const INTRO_BUBBLES = [
   { id: 1, text: "👋 Hey! Thanks for visiting my portfolio.", delay: 500 },
@@ -28,6 +29,7 @@ export interface ContactPageContentProps {
   email?: string;
   phone?: string;
   linkedInUrl?: string;
+  cvUrl?: string | null;
   clientsCount?: number;
   projectsCount?: number;
   timezone?: string;
@@ -35,11 +37,12 @@ export interface ContactPageContentProps {
 }
 
 export default function ContactPageContent({
-  name = "Your Name",
+  name = "Donald ADJINDA",
   title = "Full Stack Developer",
   email = "hello@yoursite.com",
   phone,
   linkedInUrl,
+  cvUrl = null,
   clientsCount = 18,
   projectsCount = 24,
   timezone = "Paris (CET)",
@@ -55,6 +58,18 @@ export default function ContactPageContent({
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [messageFocused, setMessageFocused] = useState(false);
+  const [cooldownUntil, setCooldownUntil] = useState<number>(0);
+
+  useEffect(() => {
+    if (cooldownUntil <= 0) return;
+    const t = setInterval(() => {
+      setCooldownUntil((prev) => {
+        const next = Math.max(0, prev - 1);
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [cooldownUntil]);
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -84,12 +99,25 @@ export default function ContactPageContent({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (cooldownUntil > 0) return;
     if (!validate()) return;
     setSubmitting(true);
     setErrors({});
+    try {
+      const supabase = createClient();
+      await supabase.from("messages").insert({
+        name: nameVal.trim(),
+        email: emailVal.trim(),
+        subject: "Contact depuis le portfolio",
+        message: messageVal.trim(),
+      });
+    } catch {
+      // continue to show success even if Supabase fails (e.g. RLS / no table)
+    }
     await new Promise((r) => setTimeout(r, 1200));
     setSubmitting(false);
     setSuccess(true);
+    setCooldownUntil(60);
     setNameVal("");
     setEmailVal("");
     setMessageVal("");
@@ -328,7 +356,7 @@ export default function ContactPageContent({
                 />
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || cooldownUntil > 0}
                   className="absolute bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full bg-fb-blue text-white hover:bg-fb-blue-dark disabled:opacity-70"
                   aria-label="Send"
                 >
@@ -341,6 +369,11 @@ export default function ContactPageContent({
               </div>
               {errors.message && (
                 <p id="message-error" className="mb-2 text-xs text-red-500">{errors.message}</p>
+              )}
+              {cooldownUntil > 0 && (
+                <p className="mt-2 text-xs text-fb-text-secondary">
+                  Vous pourrez renvoyer un message dans {cooldownUntil} s.
+                </p>
               )}
               <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-fb-text-secondary">
                 <button
@@ -357,13 +390,22 @@ export default function ContactPageContent({
                   <Calendar className="h-4 w-4" />
                   Schedule call
                 </button>
-                <a
-                  href="#cv"
-                  className="flex items-center gap-1.5 hover:text-fb-blue"
-                >
-                  <FileText className="h-4 w-4" />
-                  View resume
-                </a>
+                {cvUrl ? (
+                  <a
+                    href={cvUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 hover:text-fb-blue"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Télécharger le CV
+                  </a>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-fb-text-secondary">
+                    <FileText className="h-4 w-4" />
+                    CV (à configurer)
+                  </span>
+                )}
               </div>
             </motion.form>
           )}

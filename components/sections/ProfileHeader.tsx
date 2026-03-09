@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { Pencil, MapPin, Globe, Briefcase, MessageCircle, Download } from "lucide-react";
+import { Pencil, MapPin, Globe, Briefcase } from "lucide-react";
 import { BLUR_DATA_URL } from "@/lib/constants";
 
 const FLOAT_PARTICLES = [
@@ -45,7 +45,7 @@ export interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({
-  name = "Your Name",
+  name = "Donald ADJINDA",
   title = "Full Stack Developer · Freelance",
   location = "Paris, France",
   website = "yoursite.com",
@@ -156,7 +156,7 @@ export default function ProfileHeader({
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.4, ease: "easeOut" }}
-                className="font-syne text-2xl font-bold text-fb-text md:text-[32px]"
+                className="font-syne text-2xl font-bold text-fb-text md:text-[32px] lg:text-xl lg:md:text-2xl"
               >
                 {name}
               </motion.h1>
@@ -164,7 +164,7 @@ export default function ProfileHeader({
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.45, ease: "easeOut" }}
-                className="mt-1 text-base text-fb-text-secondary md:text-lg"
+                className="mt-1 text-base text-fb-text-secondary md:text-lg lg:text-sm lg:md:text-base"
               >
                 {title}
               </motion.p>
@@ -172,7 +172,7 @@ export default function ProfileHeader({
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.5, ease: "easeOut" }}
-                className="mt-2 flex flex-wrap items-center gap-4 text-sm text-fb-text-secondary"
+                className="mt-2 flex flex-wrap items-center gap-4 text-sm text-fb-text-secondary lg:text-xs"
               >
                 {location && (
                   <span className="flex items-center gap-1.5">
@@ -196,7 +196,7 @@ export default function ProfileHeader({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3, delay: 0.55 }}
-                className="mt-2 inline-flex rounded-full border border-fb-green bg-fb-green/15 px-3 py-1 text-xs font-medium text-fb-green"
+                className="mt-2 inline-flex rounded-full border border-fb-green bg-fb-green/15 px-3 py-1 text-xs font-medium text-fb-green lg:text-[10px]"
               >
                 Open to work
               </motion.span>
@@ -207,29 +207,15 @@ export default function ProfileHeader({
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.6, ease: "easeOut" }}
-              className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2 md:justify-end"
+              className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2"
             >
               <a
-                href="#hire"
-                className="hire-me-btn inline-flex items-center gap-2 rounded-lg bg-fb-blue px-6 py-2 font-medium text-white shadow-card transition-all duration-200 hover:translate-y-[-1px] hover:bg-fb-blue-dark hover:shadow-hover active:scale-[0.97]"
+                href="/contact"
+                className="hire-me-btn inline-flex items-center gap-2 rounded-lg bg-fb-blue px-6 py-2 font-medium text-white shadow-card transition-all duration-200 hover:translate-y-[-1px] hover:bg-fb-blue-dark hover:shadow-hover active:scale-[0.97] lg:px-4 lg:py-1.5 lg:text-sm"
               >
                 <span className="hire-me-shimmer" aria-hidden />
-                <Briefcase className="relative z-10 h-5 w-5" aria-hidden />
+                <Briefcase className="relative z-10 h-5 w-5 lg:h-4 lg:w-4" aria-hidden />
                 Hire Me
-              </a>
-              <a
-                href="#message"
-                className="inline-flex items-center gap-2 rounded-lg border-2 border-fb-blue bg-fb-card px-5 py-2 font-medium text-fb-blue transition-all duration-200 hover:bg-fb-blue-light active:scale-[0.97]"
-              >
-                <MessageCircle className="h-5 w-5" aria-hidden />
-                Message
-              </a>
-              <a
-                href="#cv"
-                className="inline-flex items-center gap-2 rounded-lg border border-fb-border bg-transparent px-5 py-2 font-medium text-fb-text transition-all duration-200 hover:bg-fb-gray active:scale-[0.97]"
-              >
-                <Download className="h-5 w-5" aria-hidden />
-                Download CV
               </a>
             </motion.div>
           </div>
@@ -244,10 +230,10 @@ export default function ProfileHeader({
           >
             {statsLabels.map((label, i) => (
               <div key={label} className="text-center">
-                <p className="font-syne text-2xl font-bold text-fb-blue md:text-[28px]">
+                <p className="font-syne text-2xl font-bold text-fb-blue md:text-[28px] lg:text-xl lg:md:text-2xl">
                   {statsValues[i]}
                 </p>
-                <p className="mt-0.5 font-dm-sans text-xs text-fb-text-secondary">
+                <p className="mt-0.5 font-dm-sans text-xs text-fb-text-secondary lg:text-[10px]">
                   {label}
                 </p>
               </div>

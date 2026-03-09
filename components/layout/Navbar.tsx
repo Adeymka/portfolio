@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, Bell, MessageCircle, Menu, Sun, Moon } from "lucide-react";
+import { Search, Bell, MessageCircle, Menu, Sun, Moon, Settings } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 
 const THEME_KEY = "theme";
@@ -22,10 +24,8 @@ const NAV_TABS = [
 ] as const;
 
 const DROPDOWN_ITEMS = [
-  { id: "visitor", label: "View as visitor", href: "#" },
-  { id: "edit", label: "Edit portfolio", href: "#" },
-  { id: "cv", label: "Download CV", href: "#" },
-  { id: "dark", label: "Dark mode", action: "toggle-dark" },
+  { id: "edit", label: "Edit portfolio", href: "/admin" },
+  { id: "dark", label: "Dark mode", action: "toggle-dark" as const },
 ] as const;
 
 export interface NavbarProps {
@@ -47,6 +47,15 @@ export default function Navbar({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  function isTabActive(tabId: string): boolean {
+    if (tabId === "home") return pathname === "/";
+    if (tabId === "projects") return pathname?.startsWith("/projects") ?? false;
+    if (tabId === "about") return pathname?.startsWith("/about") ?? false;
+    if (tabId === "contact") return pathname?.startsWith("/contact") ?? false;
+    return false;
+  }
 
   useEffect(() => {
     setTheme(getTheme());
@@ -109,22 +118,26 @@ export default function Navbar({
             </span>
           </a>
 
-          {/* Search pill — 200px default, 280px on focus */}
-          <div
+          {/* Search pill — redirects to /projects?q= */}
+          <form
+            action="/projects"
+            method="get"
             className={`ml-2 flex items-center gap-2 rounded-full bg-fb-input-bg px-4 py-2 transition-all duration-300 ${
               searchFocused ? "w-[280px] ring-2 ring-fb-blue ring-offset-1" : "w-[200px]"
             } min-w-0 shrink-0`}
+            role="search"
           >
             <Search className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
             <input
               type="search"
+              name="q"
               placeholder="Search projects..."
               className="w-full min-w-0 border-0 bg-transparent text-fb-text placeholder:text-fb-text-secondary focus:outline-none"
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
               aria-label="Search projects"
             />
-          </div>
+          </form>
         </div>
 
         {/* CENTER — desktop only, tabs centered */}
@@ -135,7 +148,7 @@ export default function Navbar({
                 key={tab.id}
                 href={tab.href}
                 className="flex h-14 min-w-[60px] items-center justify-center rounded-lg px-4 text-fb-text transition-all duration-200 hover:bg-fb-hover active:scale-[0.97] data-[active]:border-b-2 data-[active]:border-fb-blue data-[active]:text-fb-blue data-[active]:font-medium"
-                data-active={tab.id === "home" ? "true" : undefined}
+                data-active={isTabActive(tab.id) ? "true" : undefined}
                 style={{ minWidth: "60px" }}
               >
                 {tab.label}
@@ -146,11 +159,11 @@ export default function Navbar({
 
         {/* RIGHT */}
         <div className="flex shrink-0 items-center gap-1 justify-self-end">
-          {/* Notification bell with badge */}
-          <button
-            type="button"
+          {/* Notification bell — link to contact */}
+          <Link
+            href="/contact"
             className="relative flex h-9 w-9 items-center justify-center rounded-full text-fb-text transition-transform duration-200 hover:bg-fb-hover active:scale-95"
-            aria-label={`${notificationCount} notifications`}
+            aria-label="Contact"
           >
             <Bell className="h-6 w-6" aria-hidden />
             <motion.span
@@ -161,13 +174,13 @@ export default function Navbar({
             >
               {notificationCount}
             </motion.span>
-          </button>
+          </Link>
 
-          {/* Message icon with badge */}
-          <button
-            type="button"
+          {/* Message icon — link to contact */}
+          <Link
+            href="/contact"
             className="relative flex h-9 w-9 items-center justify-center rounded-full text-fb-text transition-transform duration-200 hover:bg-fb-hover active:scale-95"
-            aria-label={`${messageCount} messages`}
+            aria-label="Messages / Contact"
           >
             <MessageCircle className="h-6 w-6" aria-hidden />
             <motion.span
@@ -178,7 +191,7 @@ export default function Navbar({
             >
               {messageCount}
             </motion.span>
-          </button>
+          </Link>
 
           {/* Profile avatar + dropdown */}
           <div className="relative ml-1" ref={dropdownRef}>
@@ -208,26 +221,21 @@ export default function Navbar({
                 role="menu"
               >
                 {DROPDOWN_ITEMS.map((item) =>
-                  "action" in item && item.action ? (
+                  "action" in item && item.action === "toggle-dark" ? (
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() => (item.id === "dark" ? handleThemeToggle() : setDropdownOpen(false))}
+                      onClick={handleThemeToggle}
                       className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-fb-text transition-colors duration-200 hover:bg-fb-hover"
                       role="menuitem"
-                      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                      aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
                     >
-                      <>
-                        {theme === "dark" ? (
-                          <Sun className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
-                        ) : (
-                          <Moon className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
-                        )}
-                        <span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
-                        <span className="ml-auto text-xs text-fb-text-secondary">
-                          {theme === "dark" ? "On" : "Off"}
-                        </span>
-                      </>
+                      {theme === "dark" ? (
+                        <Sun className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
+                      ) : (
+                        <Moon className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
+                      )}
+                      <span>{theme === "dark" ? "Mode clair" : "Mode sombre"}</span>
                     </button>
                   ) : "href" in item ? (
                     <a
@@ -237,6 +245,7 @@ export default function Navbar({
                       className="flex items-center gap-2 px-4 py-2.5 text-sm text-fb-text no-underline transition-colors duration-200 hover:bg-fb-hover"
                       role="menuitem"
                     >
+                      <Settings className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
                       {item.label}
                     </a>
                   ) : null

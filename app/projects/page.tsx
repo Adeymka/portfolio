@@ -1,5 +1,20 @@
+import type { Metadata } from "next";
+import { createStaticClient } from "@/lib/supabase/server";
 import ProjectsGallery from "@/components/sections/ProjectsGallery";
+import MobileProjectsPage from "@/components/mobile/MobileProjectsPage";
 import type { ProjectWithSlug } from "@/components/sections/ProjectsGallery";
+
+export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Projets",
+  description:
+    "Découvrez les projets web de Donald ADJINDA : applications full stack, SaaS, e-commerce, vitrines. React, Next.js, Node.js.",
+  openGraph: {
+    title: "Projets | Donald ADJINDA",
+    description: "Portfolio de projets — Full Stack, SaaS, e-commerce, applications web.",
+  },
+};
 
 const GALLERY_PROJECTS: ProjectWithSlug[] = [
   {
@@ -132,16 +147,62 @@ const GALLERY_PROJECTS: ProjectWithSlug[] = [
 
 const FEATURED_IDS = ["1", "2"];
 
-export default function ProjectsPage() {
+function mapRowToProjectWithSlug(row: {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  category: string | null;
+  stack: string[] | null;
+  image_url: string | null;
+  demo_url: string | null;
+  github_url: string | null;
+  featured?: boolean;
+  created_at: string;
+}): ProjectWithSlug {
+  return {
+    id: String(row.id),
+    slug: row.slug,
+    title: row.title,
+    description: row.description ?? "",
+    stack: row.stack ?? [],
+    image: row.image_url ?? null,
+    liveUrl: row.demo_url ?? null,
+    githubUrl: row.github_url ?? null,
+    category: row.category ?? "",
+    reactions: { likes: 0, loves: 0, wows: 0 },
+    comments: [],
+    createdAt: new Date(row.created_at),
+  };
+}
+
+export default async function ProjectsPage() {
+  const supabase = createStaticClient();
+  const { data: projects } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("published", true)
+    .order("display_order", { ascending: true });
+
+  const list = projects && projects.length > 0 ? projects.map(mapRowToProjectWithSlug) : GALLERY_PROJECTS;
+  const featuredIds = projects && projects.length > 0 ? projects.filter((p) => p.featured).map((p) => String(p.id)) : FEATURED_IDS;
+
   return (
-    <main className="min-h-screen bg-fb-gray pb-12">
-      <div className="mx-auto max-w-7xl">
-        <ProjectsGallery
-          projects={GALLERY_PROJECTS}
-          featuredIds={FEATURED_IDS}
-          satisfiedClientsCount={18}
-        />
+    <>
+      <div className="hidden lg:block">
+        <main className="min-h-screen bg-fb-gray pb-12">
+          <div className="mx-auto max-w-5xl">
+            <ProjectsGallery
+              projects={list}
+              featuredIds={featuredIds}
+              satisfiedClientsCount={18}
+            />
+          </div>
+        </main>
       </div>
-    </main>
+      <div className="lg:hidden">
+        <MobileProjectsPage projects={list} />
+      </div>
+    </>
   );
 }

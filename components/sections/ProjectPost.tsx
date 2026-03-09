@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Avatar from "@/components/ui/Avatar";
@@ -54,6 +54,30 @@ export default function ProjectPost({
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [reactionPicker, setReactionPicker] = useState<"like" | "love" | "wow" | null>(null);
   const [shareCount, setShareCount] = useState(1);
+  const [shareFeedback, setShareFeedback] = useState<string | null>(null);
+
+  const handleShare = useCallback(async () => {
+    setMenuOpen(false);
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const title = project.title;
+    const text = project.description.slice(0, 200) + (project.description.length > 200 ? "…" : "");
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title, text, url });
+        setShareFeedback("Shared!");
+      } else if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+        setShareFeedback("Link copied!");
+      } else {
+        setShareFeedback("Link copied!");
+      }
+    } catch (err) {
+      if ((err as Error).name !== "AbortError") {
+        setShareFeedback("Could not share");
+      }
+    }
+    setTimeout(() => setShareFeedback(null), 2000);
+  }, [project.title, project.description]);
 
   const totalReactions = reactions.likes + reactions.loves + reactions.wows + (userReaction ? 1 : 0);
   const totalComments = project.comments.length;
@@ -93,7 +117,12 @@ export default function ProjectPost({
             {project.category}
           </span>
         </div>
-        <div className="relative shrink-0">
+        <div className="relative shrink-0 flex items-center gap-2">
+          {shareFeedback && (
+            <span className="text-xs text-fb-green font-medium">
+              {shareFeedback}
+            </span>
+          )}
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
@@ -132,7 +161,7 @@ export default function ProjectPost({
                 )}
                 <button
                   type="button"
-                  onClick={() => setMenuOpen(false)}
+                  onClick={handleShare}
                   className="block w-full px-4 py-2 text-left text-sm text-fb-text hover:bg-fb-gray"
                 >
                   Share
