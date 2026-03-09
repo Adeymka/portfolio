@@ -162,15 +162,17 @@ export default function MobileLeftSheet({
                   Liens
                 </h3>
                 <div className="flex gap-3">
-                  <a
-                    href={intro.website.startsWith("http") ? intro.website : `https://${intro.website}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-fb-gray text-fb-text"
-                    aria-label="GitHub"
-                  >
-                    <Github className="h-5 w-5" />
-                  </a>
+                  {intro.website ? (
+                    <a
+                      href={intro.website.startsWith("http") ? intro.website : `https://${intro.website}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-fb-gray text-fb-text"
+                      aria-label="Site"
+                    >
+                      <Github className="h-5 w-5" />
+                    </a>
+                  ) : null}
                   <button
                     type="button"
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-fb-gray text-fb-text"

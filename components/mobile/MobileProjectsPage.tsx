@@ -20,7 +20,7 @@ const MOBILE_INTRO: IntroData = {
   company: "Freelance",
   school: "École Internationale de Graphisme (EIG)",
   location: "Abomey-Calavi, Bénin",
-  website: "https://mykerobert3-arch.github.io/DonaldPortfolio/",
+  website: "",
   joinedDate: "2024",
 };
 

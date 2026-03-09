@@ -138,17 +138,19 @@ export default function LeftSidebar({
             <MapPin className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
             <span>Lieu : {intro.location}</span>
           </div>
-          <div className="flex items-center gap-2 py-1.5">
-            <Link2 className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
-            <a
-              href={intro.website.startsWith("http") ? intro.website : `https://${intro.website}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-fb-blue hover:underline text-[15px]"
-            >
-              {intro.website.replace(/^https?:\/\//, "")}
-            </a>
-          </div>
+          {intro.website ? (
+            <div className="flex items-center gap-2 py-1.5">
+              <Link2 className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
+              <a
+                href={intro.website.startsWith("http") ? intro.website : `https://${intro.website}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-fb-blue hover:underline text-[15px]"
+              >
+                {intro.website.replace(/^https?:\/\//, "")}
+              </a>
+            </div>
+          ) : null}
           <div className="flex items-center gap-2 py-1.5 text-[15px] text-fb-text-secondary">
             <Calendar className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
             <span>Sur le web depuis {intro.joinedDate}</span>
