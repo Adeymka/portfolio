@@ -16,10 +16,9 @@ export interface MobileProfileHeaderProps {
   profileImage?: string | null;
   projectsCount?: number;
   yearsExperience?: number;
-  happyClients?: number;
 }
 
-const STAT_LABELS = ["Projets", "Années", "Clients"] as const;
+const STAT_LABELS = ["Projets", "Années"] as const;
 
 export default function MobileProfileHeader({
   name = "Donald ADJINDA",
@@ -29,10 +28,9 @@ export default function MobileProfileHeader({
   profileImage = null,
   projectsCount = 24,
   yearsExperience = 5,
-  happyClients = 18,
 }: MobileProfileHeaderProps) {
   const [profileImageOpen, setProfileImageOpen] = useState(false);
-  const statsValues = [projectsCount, yearsExperience, happyClients];
+  const statsValues = [projectsCount, yearsExperience];
 
   useEffect(() => {
     if (!profileImageOpen) return;
@@ -143,7 +141,7 @@ export default function MobileProfileHeader({
                   {location}
                 </span>
               )}
-              {website && (
+              {website && website !== "yoursite.com" && (
                 <a
                   href={website.startsWith("http") ? website : `https://${website}`}
                   target="_blank"
@@ -151,7 +149,7 @@ export default function MobileProfileHeader({
                   className="flex items-center gap-1 text-fb-blue"
                 >
                   <Globe className="h-3.5 w-3.5 shrink-0" aria-hidden />
-                  {website}
+                  {website.replace(/^https?:\/\//, "")}
                 </a>
               )}
             </div>
@@ -168,11 +166,11 @@ export default function MobileProfileHeader({
               Hire Me
             </Link>
           </div>
-          <div className="mt-4 grid w-full grid-cols-3 border-t border-fb-border pt-3">
+          <div className="mt-4 grid w-full grid-cols-2 border-t border-fb-border pt-3">
             {STAT_LABELS.map((label, i) => (
               <div
                 key={label}
-                className={`text-center ${i < 2 ? "border-r border-fb-border" : ""}`}
+                className={`text-center ${i < 1 ? "border-r border-fb-border" : ""}`}
               >
                 <p className="font-syne text-lg font-bold text-fb-blue">
                   {statsValues[i]}

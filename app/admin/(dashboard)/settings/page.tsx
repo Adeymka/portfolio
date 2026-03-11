@@ -3,7 +3,7 @@ import { getSiteStats } from "@/lib/supabase/queries";
 
 export const metadata = {
   title: "Paramètres | Admin",
-  description: "Statistiques profil (clients, années d’expérience)",
+  description: "Statistiques profil (années d’expérience)",
 };
 
 export default async function AdminSettingsPage() {
@@ -20,7 +20,6 @@ export default async function AdminSettingsPage() {
         </p>
       </div>
       <SettingsContent
-        initialHappyClients={stats.happyClients}
         initialYearsExperience={stats.yearsExperience}
       />
     </div>

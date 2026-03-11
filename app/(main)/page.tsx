@@ -176,7 +176,6 @@ export default async function Home() {
                   profileImage={siteLinks.profileImageUrl}
                   location={siteLinks.location}
                   projectsCount={projects.length}
-                  happyClients={siteStats.happyClients}
                   yearsExperience={siteStats.yearsExperience}
                 />
               </div>
@@ -207,7 +206,6 @@ export default async function Home() {
           location={siteLinks.location}
           profileStats={{
             projectsCount: projects.length,
-            happyClients: siteStats.happyClients,
             yearsExperience: siteStats.yearsExperience,
           }}
         />

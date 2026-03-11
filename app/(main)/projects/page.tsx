@@ -183,7 +183,6 @@ export default async function ProjectsPage() {
     .select("*")
     .eq("published", true)
     .order("display_order", { ascending: true });
-
   const list = projects && projects.length > 0 ? projects.map(mapRowToProjectWithSlug) : GALLERY_PROJECTS;
   const featuredIds = projects && projects.length > 0 ? projects.filter((p) => p.featured).map((p) => String(p.id)) : FEATURED_IDS;
 
@@ -195,7 +194,6 @@ export default async function ProjectsPage() {
             <ProjectsGallery
               projects={list}
               featuredIds={featuredIds}
-              satisfiedClientsCount={18}
             />
           </div>
         </main>

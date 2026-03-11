@@ -34,7 +34,6 @@ export interface ContactPageContentProps {
   whatsappUrl?: string;
   linkedInUrl?: string;
   cvUrl?: string | null;
-  clientsCount?: number;
   projectsCount?: number;
   timezone?: string;
   avatar?: string | null;
@@ -49,14 +48,14 @@ export default function ContactPageContent({
   whatsappUrl,
   linkedInUrl,
   cvUrl = null,
-  clientsCount = 18,
   projectsCount = 24,
-  timezone = "Paris (CET)",
+  timezone = "Abomey-Calavi, Bénin (WAT)",
   avatar = null,
 }: ContactPageContentProps) {
   const [visibleBubbles, setVisibleBubbles] = useState<number[]>([]);
   const [showTyping, setShowTyping] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [displayProjects, setDisplayProjects] = useState(0);
   const [nameVal, setNameVal] = useState("");
   const [emailVal, setEmailVal] = useState("");
   const [messageVal, setMessageVal] = useState("");
@@ -90,6 +89,19 @@ export default function ContactPageContent({
     timers.push(setTimeout(() => setShowForm(true), typingStart + 1000));
     return () => timers.forEach(clearTimeout);
   }, []);
+
+  // Count-up pour projets (comme le bloc profil)
+  useEffect(() => {
+    const durationMs = 1500;
+    const start = performance.now();
+    const step = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / durationMs, 1);
+      setDisplayProjects(Math.round(progress * projectsCount));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [projectsCount]);
 
   const validate = () => {
     const next: typeof errors = {};
@@ -229,7 +241,7 @@ export default function ContactPageContent({
             </a>
           )}
           <p className="pt-2 text-white/80">
-            {clientsCount} clients helped · {projectsCount} projects delivered
+            {displayProjects} projects delivered
           </p>
           <p className="flex items-center gap-2 text-white/95">
             <span className="h-2 w-2 rounded-full bg-fb-green" />
@@ -237,9 +249,9 @@ export default function ContactPageContent({
           </p>
         </div>
         <div className="border-t border-white/20 pt-4 text-xs text-white/80">
-          <p className="font-medium text-white/95">Time zones</p>
-          <p className="mt-1">You: {timezone}</p>
-          <p className="mt-0.5">Common: NYC, London, CET</p>
+          <p className="font-medium text-white/95">Fuseau horaire</p>
+          <p className="mt-1">{timezone}</p>
+          <p className="mt-0.5">WAT (West Africa Time)</p>
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import MobileContactPage from "@/components/mobile/MobileContactPage";
 import ContactLoading from "./loading";
 import { siteLinks } from "@/lib/site-content";
+import { createStaticClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -22,20 +23,31 @@ const ContactPageContent = dynamic(
   }
 );
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const supabase = createStaticClient();
+  const [projectsResult] = await Promise.all([
+    supabase
+      .from("projects")
+      .select("id")
+      .eq("published", true),
+  ]);
+  const projectsCount = projectsResult.data?.length ?? 24;
+
   return (
     <>
       <div className="hidden lg:block">
         <main className="min-h-[calc(100vh-56px)] h-[calc(100vh-56px)]">
           <ContactPageContent
-          email={siteLinks.email}
-          phone={siteLinks.phone}
-          phoneTel={siteLinks.phoneE164}
-          whatsappUrl={siteLinks.whatsappUrl}
-          linkedInUrl={siteLinks.linkedInUrl}
-          cvUrl={siteLinks.cvUrl}
-          avatar={siteLinks.profileImageUrl}
-        />
+            email={siteLinks.email}
+            phone={siteLinks.phone}
+            phoneTel={siteLinks.phoneE164}
+            whatsappUrl={siteLinks.whatsappUrl}
+            linkedInUrl={siteLinks.linkedInUrl}
+            cvUrl={siteLinks.cvUrl}
+            avatar={siteLinks.profileImageUrl}
+            projectsCount={projectsCount}
+            timezone={`${siteLinks.location} (WAT)`}
+          />
         </main>
       </div>
       <div className="lg:hidden">

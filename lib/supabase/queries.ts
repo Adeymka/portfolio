@@ -2,11 +2,20 @@ import { createStaticClient } from "@/lib/supabase/server";
 import type { Skill } from "@/lib/data";
 
 export interface SiteStats {
-  happyClients: number;
   yearsExperience: number;
 }
 
-const DEFAULT_SITE_STATS: SiteStats = { happyClients: 18, yearsExperience: 5 };
+const DEFAULT_SITE_STATS: SiteStats = { yearsExperience: 5 };
+
+/** Coerce DB value (number or string) to integer; fallback to default if invalid. */
+function toInt(val: unknown, fallback: number): number {
+  if (typeof val === "number" && Number.isFinite(val)) return Math.max(0, Math.floor(val));
+  if (typeof val === "string") {
+    const n = parseInt(val, 10);
+    if (!Number.isNaN(n)) return Math.max(0, n);
+  }
+  return fallback;
+}
 
 export async function getSiteStats(): Promise<SiteStats> {
   try {
@@ -14,12 +23,15 @@ export async function getSiteStats(): Promise<SiteStats> {
     const { data, error } = await supabase
       .from("site_stats")
       .select("key, value")
-      .in("key", ["happy_clients", "years_experience"]);
-    if (error || !data?.length) return DEFAULT_SITE_STATS;
-    const map = Object.fromEntries(data.map((r) => [r.key, r.value]));
+      .in("key", ["years_experience"]);
+    if (error) return DEFAULT_SITE_STATS;
+    const map: Record<string, unknown> = {};
+    for (const row of data ?? []) {
+      const k = row?.key;
+      if (typeof k === "string") map[k] = row?.value;
+    }
     return {
-      happyClients: Number(map.happy_clients) || DEFAULT_SITE_STATS.happyClients,
-      yearsExperience: Number(map.years_experience) ?? DEFAULT_SITE_STATS.yearsExperience,
+      yearsExperience: toInt(map["years_experience"], DEFAULT_SITE_STATS.yearsExperience),
     };
   } catch {
     return DEFAULT_SITE_STATS;

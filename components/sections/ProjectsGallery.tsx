@@ -20,7 +20,6 @@ export interface ProjectWithSlug extends Project {
 export interface ProjectsGalleryProps {
   projects: ProjectWithSlug[];
   featuredIds?: string[];
-  satisfiedClientsCount?: number;
 }
 
 function totalReactions(p: Project) {
@@ -30,7 +29,6 @@ function totalReactions(p: Project) {
 export default function ProjectsGallery({
   projects,
   featuredIds = [],
-  satisfiedClientsCount = 18,
 }: ProjectsGalleryProps) {
   const searchParams = useSearchParams();
   const [category, setCategory] = useState<string>("All");
@@ -123,8 +121,7 @@ export default function ProjectsGallery({
             My Work
           </motion.h1>
           <p className="mt-2 font-dm-sans text-lg text-white/90">
-            {projects.length} projects · {categoriesCount} categories ·{" "}
-            {satisfiedClientsCount} satisfied clients
+            {projects.length} projects · {categoriesCount} categories
           </p>
         </div>
       </header>

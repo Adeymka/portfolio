@@ -60,7 +60,6 @@ function mapRowToProject(row: {
 
 export interface ProfileStats {
   projectsCount: number;
-  happyClients: number;
   yearsExperience: number;
 }
 
@@ -76,6 +75,11 @@ export default function MobileLayout({
   const [projects, setProjects] = useState<(Project & { slug?: string })[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();
@@ -135,17 +139,18 @@ export default function MobileLayout({
             profileImage={profileImageUrl}
             location={location}
             projectsCount={profileStats?.projectsCount ?? projects.length}
-            happyClients={profileStats?.happyClients}
             yearsExperience={profileStats?.yearsExperience}
           />
         </div>
-        <        MobileProjectFeed
+        <MobileProjectFeed
           projects={projects}
           authorAvatar={profileImageUrl}
           authorName="Donald ADJINDA"
         />
       </main>
-      <BottomNav onMoreClick={() => setSheetOpen(true)} />
+      {mounted && (
+        <BottomNav onMoreClick={() => setSheetOpen(true)} />
+      )}
       <MobileLeftSheet
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}

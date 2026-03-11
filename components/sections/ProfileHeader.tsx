@@ -16,7 +16,7 @@ const FLOAT_PARTICLES = [
   { size: 4, left: "55%", top: "75%", delay: 0.8, anim: "floatParticleAlt" },
 ];
 
-const STAT_LABELS = ["Projets réalisés", "Années d'exp.", "Clients satisfaits"] as const;
+const STAT_LABELS = ["Projets réalisés", "Années d'exp."] as const;
 
 function useCountUp(end: number, durationMs = 1500, startOnMount = true) {
   const [count, setCount] = useState(0);
@@ -42,7 +42,6 @@ export interface ProfileHeaderProps {
   profileImage?: string | null;
   projectsCount?: number;
   yearsExperience?: number;
-  happyClients?: number;
 }
 
 export default function ProfileHeader({
@@ -53,7 +52,6 @@ export default function ProfileHeader({
   profileImage = null,
   projectsCount = 24,
   yearsExperience = 5,
-  happyClients = 18,
 }: ProfileHeaderProps) {
   const [coverHover, setCoverHover] = useState(false);
   const [profileImageOpen, setProfileImageOpen] = useState(false);
@@ -70,8 +68,7 @@ export default function ProfileHeader({
   }, [profileImageOpen]);
   const projects = useCountUp(projectsCount, 1500, statsInView);
   const years = useCountUp(yearsExperience, 1500, statsInView);
-  const clients = useCountUp(happyClients, 1500, statsInView);
-  const statsValues = [projects, years, clients];
+  const statsValues = [projects, years];
   const statsLabels = STAT_LABELS;
 
   return (
@@ -228,7 +225,7 @@ export default function ProfileHeader({
                     {location}
                   </span>
                 )}
-                {website && (
+                {website && website !== "yoursite.com" && (
                   <a
                     href={website.startsWith("http") ? website : `https://${website}`}
                     target="_blank"
@@ -236,7 +233,7 @@ export default function ProfileHeader({
                     className="flex items-center gap-1.5 text-fb-blue hover:underline"
                   >
                     <Globe className="h-4 w-4 shrink-0" aria-hidden />
-                    {website}
+                    {website.replace(/^https?:\/\//, "")}
                   </a>
                 )}
               </motion.div>
@@ -274,7 +271,7 @@ export default function ProfileHeader({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.5, ease: "easeOut" }}
-            className="grid grid-cols-3 gap-6 border-t border-fb-border py-5 md:gap-8 md:py-6"
+            className="grid grid-cols-2 gap-6 border-t border-fb-border py-5 md:gap-8 md:py-6"
           >
             {statsLabels.map((label, i) => (
               <div key={label} className="text-center">
