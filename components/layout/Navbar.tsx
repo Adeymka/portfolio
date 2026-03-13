@@ -24,10 +24,6 @@ const NAV_TABS = [
   { id: "contact", label: "Contact", href: "/contact" },
 ] as const;
 
-const DROPDOWN_ITEMS = [
-  { id: "dark", label: "Dark mode", action: "toggle-dark" as const },
-] as const;
-
 export interface NavbarProps {
   siteName?: string;
   profileAvatar?: string | null;
@@ -183,36 +179,20 @@ export default function Navbar({
                 }}
                 role="menu"
               >
-                {DROPDOWN_ITEMS.map((item) =>
-                  "action" in item && item.action === "toggle-dark" ? (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={handleThemeToggle}
-                      className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-fb-text transition-colors duration-200 hover:bg-fb-hover"
-                      role="menuitem"
-                      aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
-                    >
-                      {theme === "dark" ? (
-                        <Sun className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
-                      ) : (
-                        <Moon className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
-                      )}
-                      <span>{theme === "dark" ? "Mode clair" : "Mode sombre"}</span>
-                    </button>
-                  ) : "href" in item ? (
-                    <a
-                      key={item.id}
-                      href={item.href}
-                      onClick={() => setDropdownOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-fb-text no-underline transition-colors duration-200 hover:bg-fb-hover"
-                      role="menuitem"
-                    >
-                      <Settings className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
-                      {item.label}
-                    </a>
-                  ) : null
-                )}
+                <button
+                  type="button"
+                  onClick={handleThemeToggle}
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-fb-text transition-colors duration-200 hover:bg-fb-hover"
+                  role="menuitem"
+                  aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
+                >
+                  {theme === "dark" ? (
+                    <Sun className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
+                  ) : (
+                    <Moon className="h-5 w-5 shrink-0 text-fb-text-secondary" aria-hidden />
+                  )}
+                  <span>{theme === "dark" ? "Mode clair" : "Mode sombre"}</span>
+                </button>
               </div>
             )}
           </div>
