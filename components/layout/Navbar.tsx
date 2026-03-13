@@ -25,7 +25,6 @@ const NAV_TABS = [
 ] as const;
 
 const DROPDOWN_ITEMS = [
-  { id: "edit", label: "Edit portfolio", href: "/admin" },
   { id: "dark", label: "Dark mode", action: "toggle-dark" as const },
 ] as const;
 
