@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const pageVariants = (reduced: boolean) => ({
@@ -21,7 +21,11 @@ const pageVariants = (reduced: boolean) => ({
   },
 });
 
-export default function PageTransition({ children }: { children: React.ReactNode }) {
+export default function PageTransition({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
   const reducedMotion = useReducedMotion();
   const variants = pageVariants(reducedMotion);
@@ -41,3 +45,4 @@ export default function PageTransition({ children }: { children: React.ReactNode
     </AnimatePresence>
   );
 }
+

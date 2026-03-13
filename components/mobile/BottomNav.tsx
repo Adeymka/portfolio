@@ -30,7 +30,7 @@ export default function BottomNav({ onMoreClick }: BottomNavProps) {
       {NAV_ITEMS.map(({ id, href, Icon }) => {
         const isActive =
           (id === "home" && pathname === "/") ||
-          (id !== "home" && pathname.startsWith(href));
+          (id !== "home" && pathname?.startsWith(href));
         return (
           <Link
             key={id}
@@ -52,11 +52,12 @@ export default function BottomNav({ onMoreClick }: BottomNavProps) {
       <button
         type="button"
         onClick={onMoreClick}
-        className="flex min-h-[48px] min-w-[48px] flex-1 flex-col items-center justify-center text-fb-text-secondary transition-colors hover:text-fb-text"
-        aria-label="Plus"
+        className="flex min-h-[48px] min-w-[48px] flex-1 flex-col items-center justify-center gap-0.5 text-fb-text-secondary transition-colors hover:text-fb-text"
+        aria-label="Plus d’options"
       >
         <MoreHorizontal className="h-6 w-6 shrink-0" aria-hidden />
       </button>
     </nav>
   );
 }
+

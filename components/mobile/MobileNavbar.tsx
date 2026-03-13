@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Bell } from "lucide-react";
+import { Search } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { siteLinks } from "@/lib/site-content";
 
 export interface MobileNavbarProps {
   siteName?: string;
   profileAvatar?: string | null;
-  notificationCount?: number;
 }
 
 export default function MobileNavbar({
@@ -34,7 +33,12 @@ export default function MobileNavbar({
           className="h-8 w-8 object-contain"
         />
       </Link>
-      <form action="/projects" method="get" className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-fb-input-bg px-3 py-1.5" role="search">
+      <form
+        action="/projects"
+        method="get"
+        className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-fb-input-bg px-3 py-1.5"
+        role="search"
+      >
         <Search className="h-4 w-4 shrink-0 text-fb-text-secondary" aria-hidden />
         <input
           type="search"
@@ -46,13 +50,6 @@ export default function MobileNavbar({
         />
       </form>
       <div className="flex shrink-0 items-center gap-1">
-        <Link
-          href="/contact"
-          className="relative flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-fb-text"
-          aria-label="Contact"
-        >
-          <Bell className="h-6 w-6" aria-hidden />
-        </Link>
         <Link
           href="/"
           className="flex h-8 w-8 items-center justify-center rounded-full"

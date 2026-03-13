@@ -4,8 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { Search, Bell, MessageCircle, Menu, Sun, Moon, Settings } from "lucide-react";
+import { Search, Menu, Sun, Moon, Settings } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import { siteLinks } from "@/lib/site-content";
 
@@ -33,15 +32,11 @@ const DROPDOWN_ITEMS = [
 export interface NavbarProps {
   siteName?: string;
   profileAvatar?: string | null;
-  notificationCount?: number;
-  messageCount?: number;
 }
 
 export default function Navbar({
   siteName = "Mr Adeymka",
   profileAvatar = siteLinks.profileImageUrl,
-  notificationCount = 3,
-  messageCount = 1,
 }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
@@ -162,40 +157,6 @@ export default function Navbar({
 
         {/* RIGHT */}
         <div className="flex shrink-0 items-center gap-1 justify-self-end">
-          {/* Notification bell — link to contact */}
-          <Link
-            href="/contact"
-            className="relative flex h-9 w-9 items-center justify-center rounded-full text-fb-text transition-transform duration-200 hover:bg-fb-hover active:scale-95"
-            aria-label="Contact"
-          >
-            <Bell className="h-6 w-6" aria-hidden />
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 500, damping: 25 }}
-              className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-fb-blue px-1 text-[10px] font-medium text-white"
-            >
-              {notificationCount}
-            </motion.span>
-          </Link>
-
-          {/* Message icon — link to contact */}
-          <Link
-            href="/contact"
-            className="relative flex h-9 w-9 items-center justify-center rounded-full text-fb-text transition-transform duration-200 hover:bg-fb-hover active:scale-95"
-            aria-label="Messages / Contact"
-          >
-            <MessageCircle className="h-6 w-6" aria-hidden />
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 500, damping: 25 }}
-              className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-fb-blue px-1 text-[10px] font-medium text-white"
-            >
-              {messageCount}
-            </motion.span>
-          </Link>
-
           {/* Profile avatar + dropdown */}
           <div className="relative ml-1" ref={dropdownRef}>
             <button

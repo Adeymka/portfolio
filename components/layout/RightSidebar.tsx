@@ -22,7 +22,6 @@ export interface RightSidebarProps {
   email?: string;
   githubUrl?: string;
   linkedInUrl?: string;
-  nextAvailableSlot?: string;
   /** Mon–Fri availability: true = available (green), false = busy (gray) */
   weekAvailability?: [boolean, boolean, boolean, boolean, boolean];
   trending?: TrendingSkill[];
@@ -44,7 +43,6 @@ export default function RightSidebar({
   email = siteLinks.email,
   githubUrl = siteLinks.githubUrl,
   linkedInUrl = siteLinks.linkedInUrl,
-  nextAvailableSlot = "15 mars",
   weekAvailability = [true, false, true, true, false],
   trending = DEFAULT_TRENDING,
   certifications = [],
@@ -129,7 +127,7 @@ export default function RightSidebar({
         <p className="text-[13px] text-fb-text-secondary mb-2">
           Disponibilité cette semaine
         </p>
-        <div className="flex gap-2 mb-3">
+        <div className="flex gap-2 mb-1.5">
           {WEEKDAYS.map((day, i) => (
             <div
               key={day}
@@ -145,9 +143,6 @@ export default function RightSidebar({
             </div>
           ))}
         </div>
-        <p className="text-[13px] font-medium text-fb-green">
-          Prochaine place disponible : {nextAvailableSlot}
-        </p>
       </div>
 
       {/* People you may know — affiche les certifications */}

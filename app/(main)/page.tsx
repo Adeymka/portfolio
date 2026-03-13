@@ -192,7 +192,6 @@ export default async function Home() {
               email={siteLinks.email}
               githubUrl={siteLinks.githubUrl}
               linkedInUrl={siteLinks.linkedInUrl}
-              nextAvailableSlot="15 mars"
               trending={trending}
               certifications={certifications}
             />

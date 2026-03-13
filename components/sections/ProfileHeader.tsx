@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { Pencil, MapPin, Globe, Briefcase, X } from "lucide-react";
+import { MapPin, Globe, Briefcase, X } from "lucide-react";
 import { BLUR_DATA_URL } from "@/lib/constants";
 import MatrixRain from "@/components/sections/MatrixRain";
 
@@ -53,7 +53,6 @@ export default function ProfileHeader({
   projectsCount = 24,
   yearsExperience = 5,
 }: ProfileHeaderProps) {
-  const [coverHover, setCoverHover] = useState(false);
   const [profileImageOpen, setProfileImageOpen] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
   const statsInView = useInView(statsRef, { once: true, amount: 0.5 });
@@ -79,8 +78,6 @@ export default function ProfileHeader({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="profile-cover-gradient relative h-[200px] w-full overflow-hidden rounded-t-2xl md:h-[300px]"
-        onMouseEnter={() => setCoverHover(true)}
-        onMouseLeave={() => setCoverHover(false)}
         style={{
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
@@ -90,19 +87,6 @@ export default function ProfileHeader({
         }}
       >
         <MatrixRain />
-
-        {/* Edit cover button — visible on hover */}
-        <motion.button
-          initial={false}
-          animate={{ opacity: coverHover ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
-          className="absolute bottom-3 right-3 flex items-center gap-2 rounded-lg bg-black/40 px-3 py-2 text-sm font-medium text-white backdrop-blur-sm hover:bg-black/50 disabled:pointer-events-none"
-          disabled={!coverHover}
-          type="button"
-        >
-          <Pencil className="h-4 w-4" aria-hidden />
-          Edit cover
-        </motion.button>
       </motion.div>
 
       {/* Content container: overlap avatar + info */}
